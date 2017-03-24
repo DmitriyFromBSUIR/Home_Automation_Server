@@ -1,0 +1,5 @@
+{
+  "type": "error",
+	"error_code": ["0", "2048"],
+  "details": ["uniquestr"]
+}

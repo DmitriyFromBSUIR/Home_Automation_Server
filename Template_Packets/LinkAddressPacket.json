@@ -1,0 +1,6 @@
+{
+  "type": "link",
+	"protocols": ["ws", "http", "https"],
+  "url": ["proto", "://", "host_subdomain", ".ngrok.io"],
+  "ports": ["80", "8080", "9088"]
+}

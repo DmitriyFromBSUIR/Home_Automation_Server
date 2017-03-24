@@ -1,0 +1,15 @@
+{
+    "type": "data",
+  	"dev_id": "Unique_str",
+  	"data": [
+  	{
+      "id": "Unique_Str",
+   	 	"state": ["on", "off"]
+  	},
+    {
+	  	"id": "Unique_Str",
+    	"state": ["0", "1024"]
+  	}
+  	],
+  	"time_stamp": "01/01/1970"
+}

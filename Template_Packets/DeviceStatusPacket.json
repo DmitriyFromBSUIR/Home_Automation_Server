@@ -1,0 +1,5 @@
+{
+	"type": "status",
+  "dev_id": "Unique_str",
+	"status": ["on", "off", "unknown"]
+}

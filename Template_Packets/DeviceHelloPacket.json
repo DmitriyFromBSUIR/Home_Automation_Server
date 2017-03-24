@@ -1,0 +1,26 @@
+{
+    "type":"dev_hello",
+  	"dev_id": "Unique_str",
+  	"dev_type": ["lamp", "smart_power_jack", "temperature_sensor", "light_sensor",      "electric_driver", "smoke_detector", "water_leakage_sensor", "gas_sensor", "motion_or_sound_sensor", "door_sensor", "unknown_device", "unknown_controller"],
+  	"actions": [
+   	 {
+      		"name": "Unique_Str",
+          "id": ["0", "1024"],
+      		"type": "toggle",
+          "state": ["on", "off"]
+    	},
+      {
+      		"name": "Unique_Str",
+          "id": ["0", "1024"],
+      		"type": "switch_state",
+      		"state": ["0", "1024"]
+    	},
+    	{
+      		"name": "Unique_Str",
+          "id": ["0", "1024"],
+          "type": "dimmer",
+      		"state": ["0", "100"]
+    	}
+    ],
+  	"time_stamp": "01.01.1970"
+}
