@@ -13,6 +13,16 @@ import errno
 
 from Globals import *
 
+if sys.platform == 'win32':
+    PATH_DELIM = "\\"
+    CUR_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets"
+    # MAX_JSON_PACKETS_COUNT = 20
+    GEN_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets\\Gen"
+else:
+    PATH_DELIM = "/"
+    CUR_DIR = "/home/root/Python_Workspace/iotWebServer/CM_Service/Template_Packets"
+    GEN_DIR = "/home/root/Python_Workspace/iotWebServer/CM_Service/Gen_Packets"
+
 class JSON_Packets_Parser:
     def getFilesListInCurDir(self, path):
         onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
@@ -34,6 +44,28 @@ class JSON_Packets_Parser:
     def getMainKeysList(self):
         return self._generalKeysList
 
+    def getFilenamesList(self, isLogging, path):
+        for (dirpath, dirnames, filenames) in walk(path):
+            self._templatesOfJsonPacketsFilesList.extend(filenames)
+            break
+        if (isLogging):
+            print("Templates of Packets:")
+            print(self._templatesOfJsonPacketsFilesList)
+        return self._templatesOfJsonPacketsFilesList
+
+    if sys.platform == 'win32':
+        def getFilesList(self, isLogging=False, path="\\"):
+            if path == "\\":
+                return self.getFilenamesList(isLogging, self._rootDir)
+            else:
+                return self.getFilenamesList(isLogging, path)
+    else:
+        def getFilesList(self, isLogging=False, path="."):
+            if path == ".":
+                return self.getFilenamesList(isLogging, self._rootDir)
+            else:
+                return self.getFilenamesList(isLogging, path)
+    '''
     def getFilesList(self, isLogging=False, path=""):
         if path == "":
             for (dirpath, dirnames, filenames) in walk(self._rootDir):
@@ -51,10 +83,10 @@ class JSON_Packets_Parser:
                 print("Templates of Packets:")
                 print(self._templatesOfJsonPacketsFilesList)
             return self._templatesOfJsonPacketsFilesList
-
+    '''
     def jsonPacketsParsing(self):
         for templatePacket in self._templatesOfJsonPacketsFilesList:
-            filepath = self._rootDir + "\\" + templatePacket
+            filepath = self._rootDir + PATH_DELIM + templatePacket
             with open(filepath) as data_file:
                 data = ujson.load(data_file)
                 self._jsonTPacketData.append(data)
@@ -73,7 +105,7 @@ class JSON_Packets_Parser:
         #print("debug")
 
     def run(self):
-        self.getFilesList(True)
+        self.getFilesList(True, CUR_DIR)
         self.jsonPacketsParsing()
         self.getAllJsonTPacketsKeys()
 
@@ -97,6 +129,11 @@ class JSON_Packets_Gen:
         self._templatesTypesPacketCount = list()
         # separate dirs for each packet type
         self._generatedJsonPacketsDirs = list()
+
+    def getGeneratedDirs(self):
+        return self._generatedJsonPacketsDirs
+
+
 
     def packetsProbabilitiesCheckUp(self, packTypeProbabilitiesList, isPercentsView):
         prob_sum = 0
@@ -164,11 +201,17 @@ class JSON_Packets_Gen:
         # parse template filename
         jtpName, fileExtension = jsonTemplate.split(".")
         # compose and save dir for current type to list
-        packetsTypeDirectory = CUR_DIR + "\\" + jtpName + "_Type"
+        packetsTypeDirectory = CUR_DIR + PATH_DELIM + jtpName + "_Type"
         # if not os.path.exists(packetsTypeDirectory):
         # os.makedirs(packetsTypeDirectory)
         self.genPacketTypeDirCreate(packetsTypeDirectory)
-        self._generatedJsonPacketsDirs.append(packetsTypeDirectory)
+        isDirExist = False
+        for dir in self._generatedJsonPacketsDirs:
+            if dir == packetsTypeDirectory:
+                isDirExist = True
+                break
+        if isDirExist == False:
+            self._generatedJsonPacketsDirs.append(packetsTypeDirectory)
         # generate filename
         packetName = fake.file_name(category=None, extension='json')
         # for keysList in self._generalKeysList:
@@ -187,6 +230,7 @@ class JSON_Packets_Gen:
                     keydata = fake.ipv4(network=False)
                 # generatedData.append(keydata)
                 packet.update({key: keydata})
+            '''
             if key == "data":
                 # count of controls in smart device
                 elementsCount = 2
@@ -224,7 +268,8 @@ class JSON_Packets_Gen:
                     # generatedData.append(id_state_pair)
                     dataList.append(id_state_pair)
                 packet.update({key: dataList})
-            if key == "timeStamp":
+            '''
+            if key == "time_stamp":
                 # generatedData.append(generatedDate)
                 packet.update({key: generatedDate})
             if key == "dev_type":
@@ -289,7 +334,7 @@ class JSON_Packets_Gen:
                 generatedStatus = statusList[statusNumber]
                 # generatedData.append(generatedStatus)
                 packet.update({key: generatedStatus})
-            if key == "errorCode":
+            if key == "error_code":
                 errorsCodesBorders = self._jsonTPacketData[templateNumber][key]
                 # fake.ean(length=8)
                 generatedErrorCode = rnd.randint(int(errorsCodesBorders[0]), int(errorsCodesBorders[1]))
@@ -326,6 +371,7 @@ class JSON_Packets_Gen:
                 host_subdomain = ""
                 generatedProto = ""
                 isURLgenerated = True
+                '''
                 urlStructure = self._jsonTPacketData[templateNumber][key]
                 if urlStructure[0] == "proto":
                     generatedProto = self.keyDataFromListGenerate(templateNumber, "protocols")
@@ -335,11 +381,25 @@ class JSON_Packets_Gen:
                     words = fake.words(nb=2)
                     for word in words:
                         host_subdomain += word
-                generatedUrl = proto + "://" + host_subdomain + ".ngrok.io"
+                '''
+                #
+                #generatedProto = self.keyDataFromListGenerate(templateNumber, "protocols")
+                aviableProtos = ["http", "https"]
+                protoNum = rnd.randint(0,1)
+                generatedProto = aviableProtos[protoNum]
+                proto += generatedProto
+                #
+                words = fake.words(nb=2)
+                for word in words:
+                    host_subdomain += word
+                #
+                port = rnd.randint(1024, 64000)
+                generatedUrl = proto + "://" + host_subdomain + ".ngrok.io:" + str(port)
                 # generatedData.append(generatedProto)
-                packet.update({"proto": generatedProto})
+                #packet.update({"proto": generatedProto})
                 # generatedData.append(generatedUrl)
                 packet.update({key: generatedUrl})
+            '''
             if key == "ports":
                 portsList = self._jsonTPacketData[templateNumber][key]
                 portsSelector = rnd.randint(0, len(portsList) - 1)
@@ -347,14 +407,26 @@ class JSON_Packets_Gen:
                 # generatedData.append(generatedPort)
                 packet.update({key: generatedPort})
                 # print("debug")
+            '''
+            if key == "token":
+                token = ""
+                tokenParts = rnd.randint(4, 16)
+                listForFaker = [8,13]
+                for i in range(0, tokenParts):
+                    numberDigits = rnd.randint(0, 1)
+                    number = fake.ean(length=listForFaker[numberDigits])
+                    word = fake.word()
+                    token += number + word
+                packet.update({key: token})
         # write data to json file
-        filepath = self._generatedJsonPacketsDirs[templateNumber] + "\\" + packetName
+        #filepath = self._generatedJsonPacketsDirs[templateNumber] + "\\" + packetName
+        filepath = packetsTypeDirectory + "\\" + packetName
         self.writeDataToJsonFile(filepath, packet)
 
         # inc index of template numbers
-        templateNumber += 1
+        #templateNumber += 1
 
-        print("==================== Packet #", templateNumber, " ====================")
+        print("==================== Packet Type #", templateNumber, " ====================")
         print(packet)
 
     def jsonPacketPseudorandomGeneration(self):
@@ -365,6 +437,8 @@ class JSON_Packets_Gen:
         for jsonTemplate in self._jsonTPacketsList:
             for i in range (0, self._templatesTypesPacketCount[templateNumber]-1):
                 self.packetsGenerate(jsonTemplate, templateNumber, fake)
+            # inc index of template numbers
+            templateNumber += 1
         #print("debug")
 
     def run(self, jsonPacketsProbabilitiesList):
@@ -375,18 +449,22 @@ class JSON_Packets_Gen:
             self.jsonPacketPseudorandomGeneration()
         else:
             raise Exception("Error! Incorrect sum of probabilities.")
+        print("debug")
 
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
+def start_test(MAX_JSON_PACKETS_COUNT):
     # fl2 = getFilesListInCurDir("D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets")
     #     fake = Factory.create()
 
     print("parser and gen starting ...")
     #fake = Faker()
 
+    '''
     CUR_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets"
-    MAX_JSON_PACKETS_COUNT = 10
+    #MAX_JSON_PACKETS_COUNT = 20
     GEN_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets\\Gen"
+    '''
 
     try:
         jpParser = JSON_Packets_Parser(CUR_DIR)
@@ -401,6 +479,7 @@ if __name__ == "__main__":
         10% (0.1) LinkAddressPacket.json
         '''
         jpGen.run([0.4, 0.1, 0.3, 0.1, 0.1])
+        return jpGen.getGeneratedDirs()
     except:
         print("Unexpected error:", sys.exc_info()[0])
         raise
