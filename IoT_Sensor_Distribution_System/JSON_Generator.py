@@ -162,6 +162,9 @@ class JSON_Packets_Gen:
                     self._templatesTypesPacketCount.append(self._maxJsonPacketsCount - totalPacketsSum)
             print("Packets Count Distribution: ", self._templatesTypesPacketCount)
         else:
+            print("self._jsonTemplatesCount = ", self._jsonTemplatesCount)
+            print("len(jsonPacketsProbabilitiesList) = ", len(jsonPacketsProbabilitiesList))
+            print("jsonPacketsProbabilitiesList = ", jsonPacketsProbabilitiesList)
             raise Exception("Error! maxJsonPacketsCount != jsonPacketsProbabilitiesList.size()")
         #print("debug")
 
@@ -201,7 +204,10 @@ class JSON_Packets_Gen:
         # parse template filename
         jtpName, fileExtension = jsonTemplate.split(".")
         # compose and save dir for current type to list
-        packetsTypeDirectory = CUR_DIR + PATH_DELIM + jtpName + "_Type"
+        if sys.platform == 'win32':
+            packetsTypeDirectory = CUR_DIR + PATH_DELIM + jtpName + "_Type"
+        else:
+            packetsTypeDirectory = GEN_DIR + PATH_DELIM + jtpName + "_Type"
         # if not os.path.exists(packetsTypeDirectory):
         # os.makedirs(packetsTypeDirectory)
         self.genPacketTypeDirCreate(packetsTypeDirectory)
@@ -420,7 +426,7 @@ class JSON_Packets_Gen:
                 packet.update({key: token})
         # write data to json file
         #filepath = self._generatedJsonPacketsDirs[templateNumber] + "\\" + packetName
-        filepath = packetsTypeDirectory + "\\" + packetName
+        filepath = packetsTypeDirectory + PATH_DELIM + packetName
         self.writeDataToJsonFile(filepath, packet)
 
         # inc index of template numbers

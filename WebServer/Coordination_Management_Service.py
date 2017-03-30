@@ -6,7 +6,10 @@ import ujson
 import urllib3
 import websocket
 import IoT_Sensors_Distribution_System.JSON_Generator as JSON_Gen
-
+import random as rnd
+import os
+import time
+import json
 
 #isGlobalNet = False
 
@@ -16,19 +19,24 @@ import IoT_Sensors_Distribution_System.JSON_Generator as JSON_Gen
     #WEB_APP_PORT = 8080
 #else:
 WEB_APP_URL = "localhost"
-WEB_APP_URI = "192.168.0.22/LinkAddressPacketsHandler"
-HTTP_URI = "http://localhost/LinkAddressPacketsHandler"
+WEB_APP_URI_ = "192.168.0.22/LinkAddressPacketsHandler"
+#HTTP_URI = "http://localhost/LinkAddressPacketsHandler"
+HTTP_URI = "http://da10c330.ngrok.io/update_automation_server"
 WEB_APP_PORT = 80
+WEB_APP_URI = "https://iot-tumbler.herokuapp.com/update_automation_server"
 
 
 if sys.platform == 'win32':
     SPEC_PACK_TYPE = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets\\LinkAddressPacket_Type"
     GEN_PACK_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets\\Gen"
     LOG_FILE_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Logs"
+    ONE_LINK_ADDRESS_PACK_FILEPATH = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Registration\\reg_my_edison.json"
 else:
     SPEC_PACK_TYPE = "/home/root/Python_Workspace/iotWebServer/CM_Service/Gen_Packets/LinkAddressPacket_Type"
     GEN_PACK_DIR = "/home/root/Python_Workspace/iotWebServer/CM_Service/Gen_Packets"
     LOG_FILE_DIR = "/home/root/Python_Workspace/iotWebServer/CM_Service/Logs"
+    ONE_LINK_ADDRESS_PACK_FILEPATH = "/home/root/Python_Workspace/iotWebServer/CM_Service/Registration/reg_my_edison.json"
+
 
 
 class FileWorker:
@@ -156,6 +164,8 @@ class Transceiver:
             # write to log file
             print("response status = ", response.status)
             print("data in response: ", response.data)
+            pauseInSec = rnd.randint(5, 100)
+            time.sleep(pauseInSec)
 
     def jsonPacketsSendTo(self, URL):
         websocket.enableTrace(True)
@@ -175,26 +185,57 @@ class Transceiver:
         print("Received {}".format(result))
         ws.close()
 
-    def transmit(self):
-        # send LinkAddressPackets via https
-        self.linkAddressTypeJsonPacketsSendTo()
+    def readRegistrationFile(self):
+        json_data = ""
+        with open(ONE_LINK_ADDRESS_PACK_FILEPATH) as json_file:
+            json_data = ujson.load(json_file)
+            print("json_data:")
+            print(json_data)
+            return json_data
+
+
+    def sendRegFile(self, json_data):
+        response = self._http.request('POST', HTTP_URI,
+                                      headers={'Content-Type': 'application/json'},
+                                      body=ujson.dumps(json_data))
+        print("response status = ", response.status)
+        print("data in response: ", response.data)
+
+    def transmit(self, isLinkAddressPacketsSendingActive):
+        # send LinkAddressPackets via https (multiple packets)
+        #self.linkAddressTypeJsonPacketsSendTo()
+
+        if isLinkAddressPacketsSendingActive:
+            # read LinkAddressPacket
+            json_data = self.readRegistrationFile()
+            # send
+            self.sendRegFile(json_data)
+
         # send other packets via websocket
         self.jsonPacketsSendTo(WEB_APP_URL)
 
     def run(self):
-        self.transmit()
+        self.transmit(False)
 
-if __name__ == "__main__":
+def packetsGeneration(packets_max_count=20):
     # generate 1000 pseudorandom packets
-    dirsToGenPackets = JSON_Gen.start_test(20)
-    #fw = FileWorker(GEN_PACK_DIR, LOG_FILE_DIR)
+    dirsToGenPackets = JSON_Gen.start_test(packets_max_count)
+    # fw = FileWorker(GEN_PACK_DIR, LOG_FILE_DIR)
     # caching/reading json-files
     fw = FileWorker(dirsToGenPackets, LOG_FILE_DIR)
     otherJPTypes, linkAddressJPTypes = fw.run()
+    return (otherJPTypes, linkAddressJPTypes)
+
+
+#if __name__ == "__main__":
+def sendToHTTPServer(HTTP_URI, WEB_APP_PORT):
+    #
+    otherJPTypes, linkAddressJPTypes = packetsGeneration()
+    # linkAddressTypeJP_Transceiver = Transceiver(WEB_APP_URI, WEB_APP_PORT, otherJPTypes, linkAddressJPTypes)
+    linkAddressTypeJP_Transceiver = Transceiver(HTTP_URI, WEB_APP_PORT, otherJPTypes, linkAddressJPTypes)
     # send packets to web-app
     while True:
         # transfer vis https
-        #linkAddressTypeJP_Transceiver = Transceiver(WEB_APP_URI, WEB_APP_PORT, otherJPTypes, linkAddressJPTypes)
-        linkAddressTypeJP_Transceiver = Transceiver(HTTP_URI, WEB_APP_PORT, otherJPTypes, linkAddressJPTypes)
         linkAddressTypeJP_Transceiver.run()
-        # transfer via websocket
+
+
