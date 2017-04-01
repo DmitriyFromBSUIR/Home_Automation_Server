@@ -43,6 +43,8 @@ class FileWorker:
     def __init__(self, GeneratedPacketsTypeDirs, LogFileDir):
         # dirs to template packets
         self._generatedPacketsTypesDirs = GeneratedPacketsTypeDirs
+        print("[CM_Service DEBUG]: FileWorker")
+        print(self._generatedPacketsTypesDirs)
         # must send via websocket
         #self._packetsNamesLists = list()
         self._packetsNamesLists = dict()
@@ -84,7 +86,7 @@ class FileWorker:
                 return self.getFilenamesList(isLogging, path)
     else:
         def getFilesList(self, isLogging=False, path="."):
-            if path == ".":
+            if path != ".":
                 filesList = list()
                 for curDir in self._generatedPacketsTypesDirs:
                     filesList = self.getFilenamesList(isLogging, curDir)
@@ -175,7 +177,7 @@ class Transceiver:
         port = self.web_app_port
         print("log:  Host: ", host, "; Port: ", port)
         ws = websocket.create_connection("ws://" + host + ":" + str(port) + "/websocket")
-        print("log: Sending packets to Web-Server")
+        print("log: Sending packets ")
         # send all packets
         for jsonPacket in self._jpDataList:
             ws.send(ujson.dumps(jsonPacket))
@@ -201,11 +203,11 @@ class Transceiver:
         print("response status = ", response.status)
         print("data in response: ", response.data)
 
-    def transmit(self, isLinkAddressPacketsSendingActive):
+    def transmit(self, isLinkAddressPacketsSendingActive=False):
         # send LinkAddressPackets via https (multiple packets)
         #self.linkAddressTypeJsonPacketsSendTo()
 
-        if isLinkAddressPacketsSendingActive:
+        if isLinkAddressPacketsSendingActive == True:
             # read LinkAddressPacket
             json_data = self.readRegistrationFile()
             # send
@@ -221,9 +223,16 @@ def packetsGeneration(packets_max_count=20):
     # generate 1000 pseudorandom packets
     dirsToGenPackets = JSON_Gen.start_test(packets_max_count)
     # fw = FileWorker(GEN_PACK_DIR, LOG_FILE_DIR)
+    print("Dirs to Generated Packets:")
+    print(dirsToGenPackets)
     # caching/reading json-files
     fw = FileWorker(dirsToGenPackets, LOG_FILE_DIR)
     otherJPTypes, linkAddressJPTypes = fw.run()
+
+    print("LOG: otherJPTypes, linkAddressJPType :")
+    print(otherJPTypes)
+    print(linkAddressJPTypes)
+
     return (otherJPTypes, linkAddressJPTypes)
 
 

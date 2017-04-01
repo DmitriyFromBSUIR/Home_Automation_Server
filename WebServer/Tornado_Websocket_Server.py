@@ -1,20 +1,17 @@
+import random as rnd
+import socket
+import sys
+import time
+import ujson
 
-import tornado.httpserver
 import tornado.httpclient as httpClient
-import tornado.websocket
+import tornado.httpserver
 import tornado.ioloop
 import tornado.web
-import os
-import sys
-import socket
-import ujson
-import time
-import random as rnd
-from tornado.escape import json_decode, json_encode
+import tornado.websocket
+from tornado.escape import json_decode
 
 import Coordination_Management_Service as CM_Service
-
-from tornado.options import define, options, parse_command_line
 
 #define("port", default=8000, help="run on the given port", type=int)
 
@@ -24,7 +21,7 @@ from tornado.options import define, options, parse_command_line
 # for redirecting
 HTTP_URI = "http://localhost:9000"
 
-SERVER_PORT = 80
+SERVER_PORT = 8080
 
 # create http client
 class HTTP_Client():
@@ -46,7 +43,7 @@ class IndexPageHandler(tornado.web.RequestHandler):
     def get(self):
         #self.write("This is your response")
         print("Client press button 'Connect'")
-        self.render("index.html")
+        #self.render("index.html")
         #self.finish()
 
 class PacketsHandler(tornado.web.RequestHandler):
@@ -67,12 +64,18 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     def sendAllPackets(self):
         # get all packets types without LinkAddress type
         jsonPacketsDataList = CM_Service.packetsGeneration(20)[0]
-        print("log: Sending packets to Web-Server")
+        print("-----------------------------")
+        print("Packets for sendidng:")
+        print(jsonPacketsDataList)
+        print("-----------------------------")
+        print("log: Sending packets ")
         # send all packets
         for jsonPacket in jsonPacketsDataList:
             self.write_message(ujson.dumps(jsonPacket))
-            pauseInSec = rnd.randint(5, 100)
+            pauseInSec = rnd.randint(5, 10)
             time.sleep(pauseInSec)
+            print("Sent packet:")
+            print(jsonPacket)
 
     def on_message(self, message):
         print ('message received:  %s' % message)
@@ -83,6 +86,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         self.write_message(ujson.dumps({"status": "ok"}))
         # send pseudorandom packets
         self.sendAllPackets()
+        #self.close()
 
     def on_close(self):
         print ('connection closed')
@@ -90,6 +94,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         if self.id in clients:
             del clients[self.id]
         '''
+        self.close()
 
     def check_origin(self, origin):
         return True
@@ -109,9 +114,8 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             #(r'/', IndexPageHandler),
-            #(r'/websocket', WSHandler)
             (r'/ws', WSHandler),
-            (r'/websocket', WSHandler),
+            #(r'/websocket', WSHandler),
             (r'/PacketsHandler', PacketsHandler),
         ]
         settings = {
@@ -142,8 +146,8 @@ class WebServer(object):
         if sys.platform == 'win32':
             myIP = socket.gethostbyname(socket.gethostname())
             print('*** Websocket Server Started at IP = %s ***' % myIP, ", Port = ", self._port)
-        #tornado.ioloop.IOLoop.instance().start()
-        tornado.ioloop.IOLoop.current().start()
+        tornado.ioloop.IOLoop.instance().start()
+        #tornado.ioloop.IOLoop.current().start()
 
     def __init__(self, port):
         self._port = port
@@ -163,6 +167,6 @@ def web_server_start(port):
         web_server = WebServer(port)
 
 if __name__ == "__main__":
-    #web_server_start(sys.argv[1])
+    web_server_start(sys.argv[1])
     #web_server_start(9090)
-    web_server_start(SERVER_PORT)
+    #web_server_start(SERVER_PORT)
