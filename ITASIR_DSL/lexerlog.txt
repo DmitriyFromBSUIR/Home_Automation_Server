@@ -1,0 +1,32 @@
+    lex.py: 925:lex: tokens   = ('PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN', 'SPACE', 'COMMENT', 'STARTP', 'FINISHP', 'ASSIGN', 'LSQB', 'RSQB', 'SEMICOLON', 'ELESS', 'LESS', 'EGREATER', 'GREATER', 'EQUAL', 'NOTEQUAL', 'DOT', 'COMMA', 'LOGIC_AND', 'LOGIC_OR', 'LOGIC_NOT', 'IF', 'THEN', 'ELSE', 'WHILE', 'FOR', 'DO', 'BEGIN', 'END', 'RANGE', 'TURN', 'CMDARG_ON', 'CMDARG_OFF', 'SWITCH_STATE_TO', 'DIMMER', 'IDENT', 'NUMBER', 'GETSTATE', 'GETVALUE', 'LBRACE', 'RBRACE')
+    lex.py: 926:lex: literals = ''
+    lex.py: 927:lex: states   = {'INITIAL': 'inclusive'}
+    lex.py: 956:lex: Adding rule t_IDENT -> '[a-zA-Z_][a-zA-Z_0-9]*' (state 'INITIAL')
+    lex.py: 956:lex: Adding rule t_comment -> '(/\*(.|\n)*?\*/)|(//.*)' (state 'INITIAL')
+    lex.py: 956:lex: Adding rule t_NUMBER -> '\d+' (state 'INITIAL')
+    lex.py: 956:lex: Adding rule t_newline -> '\n+' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_SPACE -> '[ 
+	]+' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_ASSIGN -> '\:=' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_COMMA -> '\,' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_PLUS -> '\+' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_RPAREN -> '\)' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_LSQB -> '\[' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_ELESS -> '<=' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_TIMES -> '\*' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_EGREATER -> '>=' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_NOTEQUAL -> '!=' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_RSQB -> '\]' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_DOT -> '\.' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_LPAREN -> '\(' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_EQUAL -> '=' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_LBRACE -> '{' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_DIVIDE -> '/' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_SEMICOLON -> ';' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_GREATER -> '>' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_RBRACE -> '}' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_MINUS -> '-' (state 'INITIAL')
+    lex.py: 962:lex: Adding rule t_LESS -> '<' (state 'INITIAL')
+    lex.py: 969:lex: ==== MASTER REGEXS FOLLOW ====
+    lex.py: 978:lex: state 'INITIAL' : regex[0] = '(?P<t_IDENT>[a-zA-Z_][a-zA-Z_0-9]*)|(?P<t_comment>(/\*(.|\n)*?\*/)|(//.*))|(?P<t_NUMBER>\d+)|(?P<t_newline>\n+)|(?P<t_SPACE>[ 
+	]+)|(?P<t_ASSIGN>\:=)|(?P<t_COMMA>\,)|(?P<t_PLUS>\+)|(?P<t_RPAREN>\))|(?P<t_LSQB>\[)|(?P<t_ELESS><=)|(?P<t_TIMES>\*)|(?P<t_EGREATER>>=)|(?P<t_NOTEQUAL>!=)|(?P<t_RSQB>\])|(?P<t_DOT>\.)|(?P<t_LPAREN>\()|(?P<t_EQUAL>=)|(?P<t_LBRACE>{)|(?P<t_DIVIDE>/)|(?P<t_SEMICOLON>;)|(?P<t_GREATER>>)|(?P<t_RBRACE>})|(?P<t_MINUS>-)|(?P<t_LESS><)'

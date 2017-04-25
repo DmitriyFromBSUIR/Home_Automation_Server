@@ -18,10 +18,14 @@ if sys.platform == 'win32':
     CUR_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets"
     # MAX_JSON_PACKETS_COUNT = 20
     GEN_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets\\Gen"
+    #GEN_DATA_PACK_TYPE_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets\\Gen\\DataPacket_Type"
+    DATA_PACK_TYPE_DIR = "D:\\Projects\\JetBrains\\PyCharm_Workspace\\Diploma\\WebServer\\Template_Packets\\DataPacket.json"
 else:
     PATH_DELIM = "/"
     CUR_DIR = "/home/root/Python_Workspace/iotWebServer/CM_Service/Template_Packets"
     GEN_DIR = "/home/root/Python_Workspace/iotWebServer/CM_Service/Gen_Packets"
+    #GEN_DATA_PACK_TYPE_DIR = "/home/root/Python_Workspace/iotWebServer/CM_Service/Gen_Packets/DataPacket_Type"
+    DATA_PACK_TYPE_DIR = "/home/root/Python_Workspace/iotWebServer/CM_Service/Template_Packets/DataPacket.json"
 
 class JSON_Packets_Parser:
     def getFilesListInCurDir(self, path):
@@ -183,6 +187,77 @@ class JSON_Packets_Gen:
         generatedProto = protocolsList[protocolSelector]
         return generatedProto
 
+    def devIdSectionGenerate(self, fakeObj, key, packet):
+        selector = rnd.randint(0, 1)
+        if selector == 0:
+            keydata = fakeObj.mac_address()
+        else:
+            keydata = fakeObj.ipv4(network=False)
+        # generatedData.append(keydata)
+        packet.update({key: keydata})
+
+    def dataSectionGenerate(self, fakerObj, key, template_packet, packet):
+        # count of controls in smart device
+        elementsCount = 2
+        # dict for this field
+        id_state_pair = dict()
+        # list for states borders
+        listOfStatesBorders = list()
+        # list for result data construction
+        dataList = list()
+        for curDict in template_packet["data"]:
+            listOfStatesBorders.append(curDict.get('state'))
+        # generating id and states
+        for i in range(0, elementsCount):
+            # generating id
+            id = ""
+            words = fakerObj.words(nb=3)
+            for word in words:
+                id += word
+            # generating state
+            stateSelector = rnd.randint(0, len(listOfStatesBorders) - 1)
+            statesList = listOfStatesBorders[i][stateSelector]
+            isNumericState = False
+            state = 0
+            if statesList != "on" and statesList != "off":
+                isNumericState = True
+            keys = ("id", "state")
+            if isNumericState:
+                state = rnd.randint(int(listOfStatesBorders[i][0]), int(
+                    listOfStatesBorders[i][1]) - 1)
+                keysData = (id, state)
+            else:
+                keysData = (id, statesList)
+            id_state_pair = dict(zip(keys, keysData))
+            # add new generated data to general list
+            # generatedData.append(id_state_pair)
+            dataList.append(id_state_pair)
+        packet.update({key: dataList})
+
+    def dataPacketSectionGenerate(self, packet, dirToDataPackType):
+        fake = Faker()
+        if dirToDataPackType != "":
+            template_data = dict()
+            data_packet = dict()
+            with open(dirToDataPackType) as json_file:
+                template_data = ujson.load(json_file)
+                for key, value in template_data.items():
+                    if key == "type":
+                        data_packet.update({key: template_data[key]})
+                    #if key == "dev_id":
+                    if key == "ctrl_id":
+                        self.devIdSectionGenerate(fake, key, data_packet)
+                    if key == "data":
+                        self.dataSectionGenerate(fake, key, template_data, data_packet)
+                    if key == "time_stamp":
+                        date = self.dateGenerate()
+                        data_packet.update({key: date})
+            #packet.update({"data_packet": data_packet})
+            packet.update({"changes_packet": data_packet})
+            return data_packet
+        else:
+            raise Exception("Error! Incorrect 'dirToDataPackType'.")
+
     def genPacketTypeDirCreate(self, path):
         try:
             os.makedirs(path)
@@ -278,13 +353,16 @@ class JSON_Packets_Gen:
             if key == "time_stamp":
                 # generatedData.append(generatedDate)
                 packet.update({key: generatedDate})
-            if key == "dev_type":
+            #if key == "dev_type":
+            #if key == "dev_name":
+            if key == "label":
                 devices_types = self._jsonTPacketData[templateNumber][key]
                 devTypeSelector = rnd.randint(0, len(devices_types) - 1)
                 devices_type = devices_types[devTypeSelector]
                 # generatedData.append(devices_type)
                 packet.update({key: devices_type})
-            if key == "actions":
+            #if key == "actions":
+            if key == "controls":
                 actionsCount = len(ACTIONS)
                 # dict for this field
                 action_info = dict()
@@ -302,13 +380,16 @@ class JSON_Packets_Gen:
                     for word in words:
                         name += word
                     # generate id for control
-                    idBorder = self._jsonTPacketData[templateNumber][key][i].get('id')
+                    #idBorder = self._jsonTPacketData[templateNumber][key][i].get('id')
+                    idBorder = self._jsonTPacketData[templateNumber][key][i].get('ctrl_id')
+                    #print("idBorder = ", idBorder)
                     id = rnd.randint(int(idBorder[0]), int(idBorder[1]) - 1)
                     # select control_type from Globals
                     controlTypeSelector = rnd.randint(0, actionsCount - 1)
                     actionName = ACTIONS_NAMES[controlTypeSelector]
                     control_type = actionName
                     # generating state
+                    '''
                     # stateSelector = rnd.randint(0, len(listOfStatesBorders) - 1)
                     stateBorders = self._jsonTPacketData[templateNumber][key][i].get('state')
                     stateSelector = rnd.randint(0, len(stateBorders) - 1)
@@ -329,6 +410,10 @@ class JSON_Packets_Gen:
                         keysData = (name, id, control_type, state)
                     else:
                         keysData = (name, id, control_type, statesList)
+                    '''
+                    #keys = ("name", "act_id", "type")
+                    keys = ("name", "ctrl_id", "type")
+                    keysData = (name, id, control_type)
                     action_info = dict(zip(keys, keysData))
                     # add new generated data to general list
                     # generatedData.append(action_info)
@@ -424,6 +509,9 @@ class JSON_Packets_Gen:
                     word = fake.word()
                     token += number + word
                 packet.update({key: token})
+            #if key == "data_packet":
+            if key == "changes_packet":
+                self.dataPacketSectionGenerate(packet, DATA_PACK_TYPE_DIR)
         # write data to json file
         #filepath = self._generatedJsonPacketsDirs[templateNumber] + "\\" + packetName
         filepath = packetsTypeDirectory + PATH_DELIM + packetName

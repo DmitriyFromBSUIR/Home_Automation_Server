@@ -1,17 +1,22 @@
-import random as rnd
-import socket
+
+import os
 import sys
-import time
+import socket
 import ujson
+import time
+import random as rnd
 
 import tornado.httpclient as httpClient
 import tornado.httpserver
+import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
-from tornado.escape import json_decode
+from tornado.escape import json_decode, json_encode
 
 import Coordination_Management_Service as CM_Service
+
+import threading as thrd
 
 #define("port", default=8000, help="run on the given port", type=int)
 
@@ -53,29 +58,98 @@ class PacketsHandler(tornado.web.RequestHandler):
         self.write(response)
 
 class WSHandler(tornado.websocket.WebSocketHandler):
-    def open(self):
+    clients = []
+    #handlers = []
+    sessionsList = dict()
+
+    def listnerService(self):
+        # add new client to general clients list
+        self.clients.append(self)
+        # add record to sessions list
+        clientHandler = thrd.Thread(target=self.sendAllPackets, args=(self,))
+        self.sessionsList.update({self: clientHandler})
+        # print("Status: ", self.get_status())
         print('create new connection')
         print("registered new client")
+        # find client session
+        for listneredSock, handler in self.sessionsList.items():
+            if self == listneredSock:
+                # start thread in self.sessionsList[listneredSock]
+                self.sessionsList.get(listneredSock).start()
+
+    def open(self):
+        self.listnerService()
+        '''
+        for listener in self.clients:
+            self.handlers.append( thrd.Thread(target=self.sendAllPackets, args=(listener,)).start() )
+        '''
+        '''
+        for i in range(0, 10000):
+            self.write_message({"status": "shit"})
+        '''
+        '''
+        for listener in self.clients:
+            self.sendAllPackets(listener)
+        '''
+
 
     def requestToHTTPServer(self):
         # create http_client
         tornado_http_client = HTTP_Client(HTTP_URI)
 
-    def sendAllPackets(self):
+    def isPacketHasTransferPermission(self, key, hasTransferPermissionsList):
+        result = False
+        for packType in hasTransferPermissionsList:
+            if key == packType:
+                result = True
+        return result
+
+    # generate and send pseudorandom packets
+    def sendAllPackets(self, listener, jpTransferStartTimeBorder=10, jpTransferEndTimeBorder=15, hasTransferPermissionsList=["dev_hello"]):
         # get all packets types without LinkAddress type
-        jsonPacketsDataList = CM_Service.packetsGeneration(20)[0]
+        #isNeedPacketsRegeneration = True
+        while True:
+            jsonPacketsDataList = CM_Service.packetsGeneration(20)[0]
+            print("LOG: Error. jsonPacketsDataList is empty!")
+            if len(jsonPacketsDataList) > 0:
+                break
         print("-----------------------------")
         print("Packets for sendidng:")
         print(jsonPacketsDataList)
         print("-----------------------------")
         print("log: Sending packets ")
+        transferInSec = rnd.randint(jpTransferStartTimeBorder, jpTransferEndTimeBorder)
         # send all packets
         for jsonPacket in jsonPacketsDataList:
-            self.write_message(ujson.dumps(jsonPacket))
-            pauseInSec = rnd.randint(5, 10)
-            time.sleep(pauseInSec)
-            print("Sent packet:")
-            print(jsonPacket)
+            # check up the transfer permission list
+            if self.isPacketHasTransferPermission(jsonPacket["type"], hasTransferPermissionsList):
+                #self.write_message(ujson.dumps(jsonPacket))
+                #pingPack = listener.ping(data='')
+                #print("ping = ", pingPack)
+                #                if not ws.ws_connection or not ws.ws_connection.stream.socket:
+                #self.ping(data='hey')
+                #if listener.ws_connection:
+                if listener in self.clients:
+                    listener.write_message(ujson.dumps(jsonPacket))
+                else:
+                    break
+                    #self.clients.remove(listener)
+                pauseInSec = rnd.randint(5, 10)
+                time.sleep(pauseInSec)
+                print("Sent packet:")
+                print(jsonPacket)
+                transferInSec -= 1
+                '''
+                if transferInSec != 0:
+                    self.write_message(ujson.dumps(jsonPacket))
+                    pauseInSec = rnd.randint(5, 10)
+                    time.sleep(pauseInSec)
+                    print("Sent packet:")
+                    print(jsonPacket)
+                    transferInSec -= 1
+                else:
+                    self.close()
+                '''
 
     def on_message(self, message):
         print ('message received:  %s' % message)
@@ -85,8 +159,11 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         print('sending back message: ' % {"status": "ok"})
         self.write_message(ujson.dumps({"status": "ok"}))
         # send pseudorandom packets
-        self.sendAllPackets()
+        #self.sendAllPackets()
         #self.close()
+
+    def on_pong(self, data):
+        print("data = ", data)
 
     def on_close(self):
         print ('connection closed')
@@ -94,6 +171,15 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         if self.id in clients:
             del clients[self.id]
         '''
+        # del client from clients list
+        self.clients.remove(self)
+        # get thread by websocket discriptor
+        t = self.sessionsList.get(self)
+        # finish thread that associate with current client
+        if t.is_alive():
+            t.join()
+        # del record in the sessions list
+        del self.sessionsList[self]
         self.close()
 
     def check_origin(self, origin):
@@ -146,6 +232,7 @@ class WebServer(object):
         if sys.platform == 'win32':
             myIP = socket.gethostbyname(socket.gethostname())
             print('*** Websocket Server Started at IP = %s ***' % myIP, ", Port = ", self._port)
+
         tornado.ioloop.IOLoop.instance().start()
         #tornado.ioloop.IOLoop.current().start()
 

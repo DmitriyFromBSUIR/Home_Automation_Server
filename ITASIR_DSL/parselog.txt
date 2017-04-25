@@ -1,0 +1,961 @@
+   yacc.py:3311:Created by PLY version 3.10 (http://www.dabeaz.com/ply)
+   yacc.py:3362:
+   yacc.py:3363:Unused terminals:
+   yacc.py:3364:
+   yacc.py:3367:    DO
+   yacc.py:3367:    MINUS
+   yacc.py:3367:    DIVIDE
+   yacc.py:3367:    TIMES
+   yacc.py:3367:    LOGIC_NOT
+   yacc.py:3367:    SPACE
+   yacc.py:3367:    FOR
+   yacc.py:3367:    WHILE
+   yacc.py:3367:    PLUS
+   yacc.py:3371:
+   yacc.py:3372:Grammar
+   yacc.py:3373:
+   yacc.py:3375:Rule 0     S' -> programm_struct
+   yacc.py:3375:Rule 1     programm_struct -> STARTP COMMENT programm_body FINISHP
+   yacc.py:3375:Rule 2     iot_device -> IDENT
+   yacc.py:3375:Rule 3     iot_dev_control -> IDENT
+   yacc.py:3375:Rule 4     iot_command -> TURN
+   yacc.py:3375:Rule 5     iot_command -> SWITCH_STATE_TO
+   yacc.py:3375:Rule 6     iot_command -> DIMMER
+   yacc.py:3375:Rule 7     toggle_cmd_args -> CMDARG_ON
+   yacc.py:3375:Rule 8     toggle_cmd_args -> CMDARG_OFF
+   yacc.py:3375:Rule 9     iot_cmd_argument -> toggle_cmd_args
+   yacc.py:3375:Rule 10    iot_cmd_argument -> NUMBER
+   yacc.py:3375:Rule 11    iot_cmd_argument -> RANGE DOT LSQB NUMBER COMMA NUMBER RSQB
+   yacc.py:3375:Rule 12    iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB
+   yacc.py:3375:Rule 13    get_device_info -> GETSTATE
+   yacc.py:3375:Rule 14    get_device_info -> GETVALUE
+   yacc.py:3375:Rule 15    iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info
+   yacc.py:3375:Rule 16    iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:3375:Rule 17    assigment -> iot_object_expr ASSIGN NUMBER
+   yacc.py:3375:Rule 18    assigment -> iot_object_expr ASSIGN toggle_cmd_args
+   yacc.py:3375:Rule 19    assigment_stmts -> assigment_stmts assigment SEMICOLON
+   yacc.py:3375:Rule 20    assigment_stmts -> assigment SEMICOLON
+   yacc.py:3375:Rule 21    logical_comp -> EGREATER
+   yacc.py:3375:Rule 22    logical_comp -> GREATER
+   yacc.py:3375:Rule 23    logical_comp -> ELESS
+   yacc.py:3375:Rule 24    logical_comp -> LESS
+   yacc.py:3375:Rule 25    logical_comp -> EQUAL
+   yacc.py:3375:Rule 26    logical_comp -> NOTEQUAL
+   yacc.py:3375:Rule 27    logical_operator -> LOGIC_AND
+   yacc.py:3375:Rule 28    logical_operator -> LOGIC_OR
+   yacc.py:3375:Rule 29    logical_cond -> logical_comp
+   yacc.py:3375:Rule 30    logical_cond -> logical_operator
+   yacc.py:3375:Rule 31    condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN
+   yacc.py:3375:Rule 32    condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN
+   yacc.py:3375:Rule 33    condition_list -> condition_list logical_operator condition
+   yacc.py:3375:Rule 34    condition_list -> condition
+   yacc.py:3375:Rule 35    if_stmt -> IF LBRACE condition_list RBRACE THEN
+   yacc.py:3375:Rule 36    condition_instr -> if_stmt BEGIN assigment_stmts END SEMICOLON
+   yacc.py:3375:Rule 37    condition_instr -> if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON
+   yacc.py:3375:Rule 38    programm_body -> programm_body condition_instr
+   yacc.py:3375:Rule 39    programm_body -> condition_instr
+   yacc.py:3393:
+   yacc.py:3394:Terminals, with rules where they appear
+   yacc.py:3395:
+   yacc.py:3399:ASSIGN               : 17 18
+   yacc.py:3399:BEGIN                : 36 37 37
+   yacc.py:3399:CMDARG_OFF           : 8
+   yacc.py:3399:CMDARG_ON            : 7
+   yacc.py:3399:COMMA                : 11 16
+   yacc.py:3399:COMMENT              : 1
+   yacc.py:3399:DIMMER               : 6
+   yacc.py:3399:DIVIDE               : 
+   yacc.py:3399:DO                   : 
+   yacc.py:3399:DOT                  : 11 12 12 12 15 15 16 16 16 16
+   yacc.py:3399:EGREATER             : 21
+   yacc.py:3399:ELESS                : 23
+   yacc.py:3399:ELSE                 : 37
+   yacc.py:3399:END                  : 36 37 37
+   yacc.py:3399:EQUAL                : 25
+   yacc.py:3399:FINISHP              : 1
+   yacc.py:3399:FOR                  : 
+   yacc.py:3399:GETSTATE             : 13
+   yacc.py:3399:GETVALUE             : 14
+   yacc.py:3399:GREATER              : 22
+   yacc.py:3399:IDENT                : 2 3
+   yacc.py:3399:IF                   : 35
+   yacc.py:3399:LBRACE               : 35
+   yacc.py:3399:LESS                 : 24
+   yacc.py:3399:LOGIC_AND            : 27
+   yacc.py:3399:LOGIC_NOT            : 
+   yacc.py:3399:LOGIC_OR             : 28
+   yacc.py:3399:LPAREN               : 31 32
+   yacc.py:3399:LSQB                 : 11 12 16 16
+   yacc.py:3399:MINUS                : 
+   yacc.py:3399:NOTEQUAL             : 26
+   yacc.py:3399:NUMBER               : 10 11 11 16 16 17 32
+   yacc.py:3399:PLUS                 : 
+   yacc.py:3399:RANGE                : 11 16
+   yacc.py:3399:RBRACE               : 35
+   yacc.py:3399:RPAREN               : 31 32
+   yacc.py:3399:RSQB                 : 11 12 16 16
+   yacc.py:3399:SEMICOLON            : 19 20 36 37
+   yacc.py:3399:SPACE                : 
+   yacc.py:3399:STARTP               : 1
+   yacc.py:3399:SWITCH_STATE_TO      : 5
+   yacc.py:3399:THEN                 : 35
+   yacc.py:3399:TIMES                : 
+   yacc.py:3399:TURN                 : 4
+   yacc.py:3399:WHILE                : 
+   yacc.py:3399:error                : 
+   yacc.py:3401:
+   yacc.py:3402:Nonterminals, with rules where they appear
+   yacc.py:3403:
+   yacc.py:3407:assigment            : 19 20
+   yacc.py:3407:assigment_stmts      : 19 36 37 37
+   yacc.py:3407:condition            : 33 34
+   yacc.py:3407:condition_instr      : 38 39
+   yacc.py:3407:condition_list       : 33 35
+   yacc.py:3407:get_device_info      : 15
+   yacc.py:3407:if_stmt              : 36 37
+   yacc.py:3407:iot_cmd_argument     : 12
+   yacc.py:3407:iot_command          : 12 16
+   yacc.py:3407:iot_dev_control      : 12 15 16
+   yacc.py:3407:iot_device           : 12 15 16
+   yacc.py:3407:iot_device_get_info  : 31 31 32
+   yacc.py:3407:iot_object_expr      : 17 18
+   yacc.py:3407:logical_comp         : 29 31 32
+   yacc.py:3407:logical_cond         : 
+   yacc.py:3407:logical_operator     : 30 33
+   yacc.py:3407:programm_body        : 1 38
+   yacc.py:3407:programm_struct      : 0
+   yacc.py:3407:toggle_cmd_args      : 9 18
+   yacc.py:3408:
+   yacc.py:2542:Parsing method: LALR
+   yacc.py:2560:
+   yacc.py:2561:state 0
+   yacc.py:2562:
+   yacc.py:2564:    (0) S' -> . programm_struct
+   yacc.py:2564:    (1) programm_struct -> . STARTP COMMENT programm_body FINISHP
+   yacc.py:2565:
+   yacc.py:2686:    STARTP          shift and go to state 1
+   yacc.py:2688:
+   yacc.py:2713:    programm_struct                shift and go to state 2
+   yacc.py:2560:
+   yacc.py:2561:state 1
+   yacc.py:2562:
+   yacc.py:2564:    (1) programm_struct -> STARTP . COMMENT programm_body FINISHP
+   yacc.py:2565:
+   yacc.py:2686:    COMMENT         shift and go to state 3
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 2
+   yacc.py:2562:
+   yacc.py:2564:    (0) S' -> programm_struct .
+   yacc.py:2565:
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 3
+   yacc.py:2562:
+   yacc.py:2564:    (1) programm_struct -> STARTP COMMENT . programm_body FINISHP
+   yacc.py:2564:    (38) programm_body -> . programm_body condition_instr
+   yacc.py:2564:    (39) programm_body -> . condition_instr
+   yacc.py:2564:    (36) condition_instr -> . if_stmt BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2564:    (37) condition_instr -> . if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2564:    (35) if_stmt -> . IF LBRACE condition_list RBRACE THEN
+   yacc.py:2565:
+   yacc.py:2686:    IF              shift and go to state 5
+   yacc.py:2688:
+   yacc.py:2713:    programm_body                  shift and go to state 6
+   yacc.py:2713:    if_stmt                        shift and go to state 7
+   yacc.py:2713:    condition_instr                shift and go to state 4
+   yacc.py:2560:
+   yacc.py:2561:state 4
+   yacc.py:2562:
+   yacc.py:2564:    (39) programm_body -> condition_instr .
+   yacc.py:2565:
+   yacc.py:2686:    FINISHP         reduce using rule 39 (programm_body -> condition_instr .)
+   yacc.py:2686:    IF              reduce using rule 39 (programm_body -> condition_instr .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 5
+   yacc.py:2562:
+   yacc.py:2564:    (35) if_stmt -> IF . LBRACE condition_list RBRACE THEN
+   yacc.py:2565:
+   yacc.py:2686:    LBRACE          shift and go to state 8
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 6
+   yacc.py:2562:
+   yacc.py:2564:    (1) programm_struct -> STARTP COMMENT programm_body . FINISHP
+   yacc.py:2564:    (38) programm_body -> programm_body . condition_instr
+   yacc.py:2564:    (36) condition_instr -> . if_stmt BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2564:    (37) condition_instr -> . if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2564:    (35) if_stmt -> . IF LBRACE condition_list RBRACE THEN
+   yacc.py:2565:
+   yacc.py:2686:    FINISHP         shift and go to state 10
+   yacc.py:2686:    IF              shift and go to state 5
+   yacc.py:2688:
+   yacc.py:2713:    if_stmt                        shift and go to state 7
+   yacc.py:2713:    condition_instr                shift and go to state 9
+   yacc.py:2560:
+   yacc.py:2561:state 7
+   yacc.py:2562:
+   yacc.py:2564:    (36) condition_instr -> if_stmt . BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2564:    (37) condition_instr -> if_stmt . BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2565:
+   yacc.py:2686:    BEGIN           shift and go to state 11
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 8
+   yacc.py:2562:
+   yacc.py:2564:    (35) if_stmt -> IF LBRACE . condition_list RBRACE THEN
+   yacc.py:2564:    (33) condition_list -> . condition_list logical_operator condition
+   yacc.py:2564:    (34) condition_list -> . condition
+   yacc.py:2564:    (31) condition -> . LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN
+   yacc.py:2564:    (32) condition -> . LPAREN iot_device_get_info logical_comp NUMBER RPAREN
+   yacc.py:2565:
+   yacc.py:2686:    LPAREN          shift and go to state 13
+   yacc.py:2688:
+   yacc.py:2713:    condition                      shift and go to state 12
+   yacc.py:2713:    condition_list                 shift and go to state 14
+   yacc.py:2560:
+   yacc.py:2561:state 9
+   yacc.py:2562:
+   yacc.py:2564:    (38) programm_body -> programm_body condition_instr .
+   yacc.py:2565:
+   yacc.py:2686:    FINISHP         reduce using rule 38 (programm_body -> programm_body condition_instr .)
+   yacc.py:2686:    IF              reduce using rule 38 (programm_body -> programm_body condition_instr .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 10
+   yacc.py:2562:
+   yacc.py:2564:    (1) programm_struct -> STARTP COMMENT programm_body FINISHP .
+   yacc.py:2565:
+   yacc.py:2686:    $end            reduce using rule 1 (programm_struct -> STARTP COMMENT programm_body FINISHP .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 11
+   yacc.py:2562:
+   yacc.py:2564:    (36) condition_instr -> if_stmt BEGIN . assigment_stmts END SEMICOLON
+   yacc.py:2564:    (37) condition_instr -> if_stmt BEGIN . assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2564:    (19) assigment_stmts -> . assigment_stmts assigment SEMICOLON
+   yacc.py:2564:    (20) assigment_stmts -> . assigment SEMICOLON
+   yacc.py:2564:    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+   yacc.py:2564:    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+   yacc.py:2564:    (12) iot_object_expr -> . iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB
+   yacc.py:2564:    (2) iot_device -> . IDENT
+   yacc.py:2565:
+   yacc.py:2686:    IDENT           shift and go to state 15
+   yacc.py:2688:
+   yacc.py:2713:    iot_device                     shift and go to state 18
+   yacc.py:2713:    assigment_stmts                shift and go to state 19
+   yacc.py:2713:    iot_object_expr                shift and go to state 16
+   yacc.py:2713:    assigment                      shift and go to state 17
+   yacc.py:2560:
+   yacc.py:2561:state 12
+   yacc.py:2562:
+   yacc.py:2564:    (34) condition_list -> condition .
+   yacc.py:2565:
+   yacc.py:2686:    RBRACE          reduce using rule 34 (condition_list -> condition .)
+   yacc.py:2686:    LOGIC_AND       reduce using rule 34 (condition_list -> condition .)
+   yacc.py:2686:    LOGIC_OR        reduce using rule 34 (condition_list -> condition .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 13
+   yacc.py:2562:
+   yacc.py:2564:    (31) condition -> LPAREN . iot_device_get_info logical_comp iot_device_get_info RPAREN
+   yacc.py:2564:    (32) condition -> LPAREN . iot_device_get_info logical_comp NUMBER RPAREN
+   yacc.py:2564:    (15) iot_device_get_info -> . iot_device DOT iot_dev_control DOT get_device_info
+   yacc.py:2564:    (16) iot_device_get_info -> . iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2564:    (2) iot_device -> . IDENT
+   yacc.py:2565:
+   yacc.py:2686:    IDENT           shift and go to state 15
+   yacc.py:2688:
+   yacc.py:2713:    iot_device                     shift and go to state 21
+   yacc.py:2713:    iot_device_get_info            shift and go to state 20
+   yacc.py:2560:
+   yacc.py:2561:state 14
+   yacc.py:2562:
+   yacc.py:2564:    (35) if_stmt -> IF LBRACE condition_list . RBRACE THEN
+   yacc.py:2564:    (33) condition_list -> condition_list . logical_operator condition
+   yacc.py:2564:    (27) logical_operator -> . LOGIC_AND
+   yacc.py:2564:    (28) logical_operator -> . LOGIC_OR
+   yacc.py:2565:
+   yacc.py:2686:    RBRACE          shift and go to state 25
+   yacc.py:2686:    LOGIC_AND       shift and go to state 24
+   yacc.py:2686:    LOGIC_OR        shift and go to state 23
+   yacc.py:2688:
+   yacc.py:2713:    logical_operator               shift and go to state 22
+   yacc.py:2560:
+   yacc.py:2561:state 15
+   yacc.py:2562:
+   yacc.py:2564:    (2) iot_device -> IDENT .
+   yacc.py:2565:
+   yacc.py:2686:    DOT             reduce using rule 2 (iot_device -> IDENT .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 16
+   yacc.py:2562:
+   yacc.py:2564:    (17) assigment -> iot_object_expr . ASSIGN NUMBER
+   yacc.py:2564:    (18) assigment -> iot_object_expr . ASSIGN toggle_cmd_args
+   yacc.py:2565:
+   yacc.py:2686:    ASSIGN          shift and go to state 26
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 17
+   yacc.py:2562:
+   yacc.py:2564:    (20) assigment_stmts -> assigment . SEMICOLON
+   yacc.py:2565:
+   yacc.py:2686:    SEMICOLON       shift and go to state 27
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 18
+   yacc.py:2562:
+   yacc.py:2564:    (12) iot_object_expr -> iot_device . DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB
+   yacc.py:2565:
+   yacc.py:2686:    DOT             shift and go to state 28
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 19
+   yacc.py:2562:
+   yacc.py:2564:    (36) condition_instr -> if_stmt BEGIN assigment_stmts . END SEMICOLON
+   yacc.py:2564:    (37) condition_instr -> if_stmt BEGIN assigment_stmts . END ELSE BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2564:    (19) assigment_stmts -> assigment_stmts . assigment SEMICOLON
+   yacc.py:2564:    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+   yacc.py:2564:    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+   yacc.py:2564:    (12) iot_object_expr -> . iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB
+   yacc.py:2564:    (2) iot_device -> . IDENT
+   yacc.py:2565:
+   yacc.py:2686:    END             shift and go to state 29
+   yacc.py:2686:    IDENT           shift and go to state 15
+   yacc.py:2688:
+   yacc.py:2713:    iot_device                     shift and go to state 18
+   yacc.py:2713:    iot_object_expr                shift and go to state 16
+   yacc.py:2713:    assigment                      shift and go to state 30
+   yacc.py:2560:
+   yacc.py:2561:state 20
+   yacc.py:2562:
+   yacc.py:2564:    (31) condition -> LPAREN iot_device_get_info . logical_comp iot_device_get_info RPAREN
+   yacc.py:2564:    (32) condition -> LPAREN iot_device_get_info . logical_comp NUMBER RPAREN
+   yacc.py:2564:    (21) logical_comp -> . EGREATER
+   yacc.py:2564:    (22) logical_comp -> . GREATER
+   yacc.py:2564:    (23) logical_comp -> . ELESS
+   yacc.py:2564:    (24) logical_comp -> . LESS
+   yacc.py:2564:    (25) logical_comp -> . EQUAL
+   yacc.py:2564:    (26) logical_comp -> . NOTEQUAL
+   yacc.py:2565:
+   yacc.py:2686:    EGREATER        shift and go to state 35
+   yacc.py:2686:    GREATER         shift and go to state 36
+   yacc.py:2686:    ELESS           shift and go to state 34
+   yacc.py:2686:    LESS            shift and go to state 33
+   yacc.py:2686:    EQUAL           shift and go to state 31
+   yacc.py:2686:    NOTEQUAL        shift and go to state 37
+   yacc.py:2688:
+   yacc.py:2713:    logical_comp                   shift and go to state 32
+   yacc.py:2560:
+   yacc.py:2561:state 21
+   yacc.py:2562:
+   yacc.py:2564:    (15) iot_device_get_info -> iot_device . DOT iot_dev_control DOT get_device_info
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device . DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    DOT             shift and go to state 38
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 22
+   yacc.py:2562:
+   yacc.py:2564:    (33) condition_list -> condition_list logical_operator . condition
+   yacc.py:2564:    (31) condition -> . LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN
+   yacc.py:2564:    (32) condition -> . LPAREN iot_device_get_info logical_comp NUMBER RPAREN
+   yacc.py:2565:
+   yacc.py:2686:    LPAREN          shift and go to state 13
+   yacc.py:2688:
+   yacc.py:2713:    condition                      shift and go to state 39
+   yacc.py:2560:
+   yacc.py:2561:state 23
+   yacc.py:2562:
+   yacc.py:2564:    (28) logical_operator -> LOGIC_OR .
+   yacc.py:2565:
+   yacc.py:2686:    LPAREN          reduce using rule 28 (logical_operator -> LOGIC_OR .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 24
+   yacc.py:2562:
+   yacc.py:2564:    (27) logical_operator -> LOGIC_AND .
+   yacc.py:2565:
+   yacc.py:2686:    LPAREN          reduce using rule 27 (logical_operator -> LOGIC_AND .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 25
+   yacc.py:2562:
+   yacc.py:2564:    (35) if_stmt -> IF LBRACE condition_list RBRACE . THEN
+   yacc.py:2565:
+   yacc.py:2686:    THEN            shift and go to state 40
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 26
+   yacc.py:2562:
+   yacc.py:2564:    (17) assigment -> iot_object_expr ASSIGN . NUMBER
+   yacc.py:2564:    (18) assigment -> iot_object_expr ASSIGN . toggle_cmd_args
+   yacc.py:2564:    (7) toggle_cmd_args -> . CMDARG_ON
+   yacc.py:2564:    (8) toggle_cmd_args -> . CMDARG_OFF
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          shift and go to state 41
+   yacc.py:2686:    CMDARG_ON       shift and go to state 42
+   yacc.py:2686:    CMDARG_OFF      shift and go to state 44
+   yacc.py:2688:
+   yacc.py:2713:    toggle_cmd_args                shift and go to state 43
+   yacc.py:2560:
+   yacc.py:2561:state 27
+   yacc.py:2562:
+   yacc.py:2564:    (20) assigment_stmts -> assigment SEMICOLON .
+   yacc.py:2565:
+   yacc.py:2686:    END             reduce using rule 20 (assigment_stmts -> assigment SEMICOLON .)
+   yacc.py:2686:    IDENT           reduce using rule 20 (assigment_stmts -> assigment SEMICOLON .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 28
+   yacc.py:2562:
+   yacc.py:2564:    (12) iot_object_expr -> iot_device DOT . iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB
+   yacc.py:2564:    (3) iot_dev_control -> . IDENT
+   yacc.py:2565:
+   yacc.py:2686:    IDENT           shift and go to state 45
+   yacc.py:2688:
+   yacc.py:2713:    iot_dev_control                shift and go to state 46
+   yacc.py:2560:
+   yacc.py:2561:state 29
+   yacc.py:2562:
+   yacc.py:2564:    (36) condition_instr -> if_stmt BEGIN assigment_stmts END . SEMICOLON
+   yacc.py:2564:    (37) condition_instr -> if_stmt BEGIN assigment_stmts END . ELSE BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2565:
+   yacc.py:2686:    SEMICOLON       shift and go to state 48
+   yacc.py:2686:    ELSE            shift and go to state 47
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 30
+   yacc.py:2562:
+   yacc.py:2564:    (19) assigment_stmts -> assigment_stmts assigment . SEMICOLON
+   yacc.py:2565:
+   yacc.py:2686:    SEMICOLON       shift and go to state 49
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 31
+   yacc.py:2562:
+   yacc.py:2564:    (25) logical_comp -> EQUAL .
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          reduce using rule 25 (logical_comp -> EQUAL .)
+   yacc.py:2686:    IDENT           reduce using rule 25 (logical_comp -> EQUAL .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 32
+   yacc.py:2562:
+   yacc.py:2564:    (31) condition -> LPAREN iot_device_get_info logical_comp . iot_device_get_info RPAREN
+   yacc.py:2564:    (32) condition -> LPAREN iot_device_get_info logical_comp . NUMBER RPAREN
+   yacc.py:2564:    (15) iot_device_get_info -> . iot_device DOT iot_dev_control DOT get_device_info
+   yacc.py:2564:    (16) iot_device_get_info -> . iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2564:    (2) iot_device -> . IDENT
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          shift and go to state 50
+   yacc.py:2686:    IDENT           shift and go to state 15
+   yacc.py:2688:
+   yacc.py:2713:    iot_device                     shift and go to state 21
+   yacc.py:2713:    iot_device_get_info            shift and go to state 51
+   yacc.py:2560:
+   yacc.py:2561:state 33
+   yacc.py:2562:
+   yacc.py:2564:    (24) logical_comp -> LESS .
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          reduce using rule 24 (logical_comp -> LESS .)
+   yacc.py:2686:    IDENT           reduce using rule 24 (logical_comp -> LESS .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 34
+   yacc.py:2562:
+   yacc.py:2564:    (23) logical_comp -> ELESS .
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          reduce using rule 23 (logical_comp -> ELESS .)
+   yacc.py:2686:    IDENT           reduce using rule 23 (logical_comp -> ELESS .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 35
+   yacc.py:2562:
+   yacc.py:2564:    (21) logical_comp -> EGREATER .
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          reduce using rule 21 (logical_comp -> EGREATER .)
+   yacc.py:2686:    IDENT           reduce using rule 21 (logical_comp -> EGREATER .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 36
+   yacc.py:2562:
+   yacc.py:2564:    (22) logical_comp -> GREATER .
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          reduce using rule 22 (logical_comp -> GREATER .)
+   yacc.py:2686:    IDENT           reduce using rule 22 (logical_comp -> GREATER .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 37
+   yacc.py:2562:
+   yacc.py:2564:    (26) logical_comp -> NOTEQUAL .
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          reduce using rule 26 (logical_comp -> NOTEQUAL .)
+   yacc.py:2686:    IDENT           reduce using rule 26 (logical_comp -> NOTEQUAL .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 38
+   yacc.py:2562:
+   yacc.py:2564:    (15) iot_device_get_info -> iot_device DOT . iot_dev_control DOT get_device_info
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT . iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2564:    (3) iot_dev_control -> . IDENT
+   yacc.py:2565:
+   yacc.py:2686:    IDENT           shift and go to state 45
+   yacc.py:2688:
+   yacc.py:2713:    iot_dev_control                shift and go to state 52
+   yacc.py:2560:
+   yacc.py:2561:state 39
+   yacc.py:2562:
+   yacc.py:2564:    (33) condition_list -> condition_list logical_operator condition .
+   yacc.py:2565:
+   yacc.py:2686:    RBRACE          reduce using rule 33 (condition_list -> condition_list logical_operator condition .)
+   yacc.py:2686:    LOGIC_AND       reduce using rule 33 (condition_list -> condition_list logical_operator condition .)
+   yacc.py:2686:    LOGIC_OR        reduce using rule 33 (condition_list -> condition_list logical_operator condition .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 40
+   yacc.py:2562:
+   yacc.py:2564:    (35) if_stmt -> IF LBRACE condition_list RBRACE THEN .
+   yacc.py:2565:
+   yacc.py:2686:    BEGIN           reduce using rule 35 (if_stmt -> IF LBRACE condition_list RBRACE THEN .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 41
+   yacc.py:2562:
+   yacc.py:2564:    (17) assigment -> iot_object_expr ASSIGN NUMBER .
+   yacc.py:2565:
+   yacc.py:2686:    SEMICOLON       reduce using rule 17 (assigment -> iot_object_expr ASSIGN NUMBER .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 42
+   yacc.py:2562:
+   yacc.py:2564:    (7) toggle_cmd_args -> CMDARG_ON .
+   yacc.py:2565:
+   yacc.py:2686:    RSQB            reduce using rule 7 (toggle_cmd_args -> CMDARG_ON .)
+   yacc.py:2686:    SEMICOLON       reduce using rule 7 (toggle_cmd_args -> CMDARG_ON .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 43
+   yacc.py:2562:
+   yacc.py:2564:    (18) assigment -> iot_object_expr ASSIGN toggle_cmd_args .
+   yacc.py:2565:
+   yacc.py:2686:    SEMICOLON       reduce using rule 18 (assigment -> iot_object_expr ASSIGN toggle_cmd_args .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 44
+   yacc.py:2562:
+   yacc.py:2564:    (8) toggle_cmd_args -> CMDARG_OFF .
+   yacc.py:2565:
+   yacc.py:2686:    RSQB            reduce using rule 8 (toggle_cmd_args -> CMDARG_OFF .)
+   yacc.py:2686:    SEMICOLON       reduce using rule 8 (toggle_cmd_args -> CMDARG_OFF .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 45
+   yacc.py:2562:
+   yacc.py:2564:    (3) iot_dev_control -> IDENT .
+   yacc.py:2565:
+   yacc.py:2686:    DOT             reduce using rule 3 (iot_dev_control -> IDENT .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 46
+   yacc.py:2562:
+   yacc.py:2564:    (12) iot_object_expr -> iot_device DOT iot_dev_control . DOT iot_command DOT LSQB iot_cmd_argument RSQB
+   yacc.py:2565:
+   yacc.py:2686:    DOT             shift and go to state 53
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 47
+   yacc.py:2562:
+   yacc.py:2564:    (37) condition_instr -> if_stmt BEGIN assigment_stmts END ELSE . BEGIN assigment_stmts END SEMICOLON
+   yacc.py:2565:
+   yacc.py:2686:    BEGIN           shift and go to state 54
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 48
+   yacc.py:2562:
+   yacc.py:2564:    (36) condition_instr -> if_stmt BEGIN assigment_stmts END SEMICOLON .
+   yacc.py:2565:
+   yacc.py:2686:    FINISHP         reduce using rule 36 (condition_instr -> if_stmt BEGIN assigment_stmts END SEMICOLON .)
+   yacc.py:2686:    IF              reduce using rule 36 (condition_instr -> if_stmt BEGIN assigment_stmts END SEMICOLON .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 49
+   yacc.py:2562:
+   yacc.py:2564:    (19) assigment_stmts -> assigment_stmts assigment SEMICOLON .
+   yacc.py:2565:
+   yacc.py:2686:    END             reduce using rule 19 (assigment_stmts -> assigment_stmts assigment SEMICOLON .)
+   yacc.py:2686:    IDENT           reduce using rule 19 (assigment_stmts -> assigment_stmts assigment SEMICOLON .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 50
+   yacc.py:2562:
+   yacc.py:2564:    (32) condition -> LPAREN iot_device_get_info logical_comp NUMBER . RPAREN
+   yacc.py:2565:
+   yacc.py:2686:    RPAREN          shift and go to state 55
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 51
+   yacc.py:2562:
+   yacc.py:2564:    (31) condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info . RPAREN
+   yacc.py:2565:
+   yacc.py:2686:    RPAREN          shift and go to state 56
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 52
+   yacc.py:2562:
+   yacc.py:2564:    (15) iot_device_get_info -> iot_device DOT iot_dev_control . DOT get_device_info
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control . DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    DOT             shift and go to state 57
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 53
+   yacc.py:2562:
+   yacc.py:2564:    (12) iot_object_expr -> iot_device DOT iot_dev_control DOT . iot_command DOT LSQB iot_cmd_argument RSQB
+   yacc.py:2564:    (4) iot_command -> . TURN
+   yacc.py:2564:    (5) iot_command -> . SWITCH_STATE_TO
+   yacc.py:2564:    (6) iot_command -> . DIMMER
+   yacc.py:2565:
+   yacc.py:2686:    TURN            shift and go to state 59
+   yacc.py:2686:    SWITCH_STATE_TO shift and go to state 60
+   yacc.py:2686:    DIMMER          shift and go to state 58
+   yacc.py:2688:
+   yacc.py:2713:    iot_command                    shift and go to state 61
+   yacc.py:2560:
+   yacc.py:2561:state 54
+   yacc.py:2562:
+   yacc.py:2564:    (37) condition_instr -> if_stmt BEGIN assigment_stmts END ELSE BEGIN . assigment_stmts END SEMICOLON
+   yacc.py:2564:    (19) assigment_stmts -> . assigment_stmts assigment SEMICOLON
+   yacc.py:2564:    (20) assigment_stmts -> . assigment SEMICOLON
+   yacc.py:2564:    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+   yacc.py:2564:    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+   yacc.py:2564:    (12) iot_object_expr -> . iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB
+   yacc.py:2564:    (2) iot_device -> . IDENT
+   yacc.py:2565:
+   yacc.py:2686:    IDENT           shift and go to state 15
+   yacc.py:2688:
+   yacc.py:2713:    iot_device                     shift and go to state 18
+   yacc.py:2713:    assigment_stmts                shift and go to state 62
+   yacc.py:2713:    iot_object_expr                shift and go to state 16
+   yacc.py:2713:    assigment                      shift and go to state 17
+   yacc.py:2560:
+   yacc.py:2561:state 55
+   yacc.py:2562:
+   yacc.py:2564:    (32) condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN .
+   yacc.py:2565:
+   yacc.py:2686:    RBRACE          reduce using rule 32 (condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN .)
+   yacc.py:2686:    LOGIC_AND       reduce using rule 32 (condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN .)
+   yacc.py:2686:    LOGIC_OR        reduce using rule 32 (condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 56
+   yacc.py:2562:
+   yacc.py:2564:    (31) condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN .
+   yacc.py:2565:
+   yacc.py:2686:    RBRACE          reduce using rule 31 (condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN .)
+   yacc.py:2686:    LOGIC_AND       reduce using rule 31 (condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN .)
+   yacc.py:2686:    LOGIC_OR        reduce using rule 31 (condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 57
+   yacc.py:2562:
+   yacc.py:2564:    (15) iot_device_get_info -> iot_device DOT iot_dev_control DOT . get_device_info
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT . iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2564:    (13) get_device_info -> . GETSTATE
+   yacc.py:2564:    (14) get_device_info -> . GETVALUE
+   yacc.py:2564:    (4) iot_command -> . TURN
+   yacc.py:2564:    (5) iot_command -> . SWITCH_STATE_TO
+   yacc.py:2564:    (6) iot_command -> . DIMMER
+   yacc.py:2565:
+   yacc.py:2686:    GETSTATE        shift and go to state 64
+   yacc.py:2686:    GETVALUE        shift and go to state 63
+   yacc.py:2686:    TURN            shift and go to state 59
+   yacc.py:2686:    SWITCH_STATE_TO shift and go to state 60
+   yacc.py:2686:    DIMMER          shift and go to state 58
+   yacc.py:2688:
+   yacc.py:2713:    get_device_info                shift and go to state 65
+   yacc.py:2713:    iot_command                    shift and go to state 66
+   yacc.py:2560:
+   yacc.py:2561:state 58
+   yacc.py:2562:
+   yacc.py:2564:    (6) iot_command -> DIMMER .
+   yacc.py:2565:
+   yacc.py:2686:    DOT             reduce using rule 6 (iot_command -> DIMMER .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 59
+   yacc.py:2562:
+   yacc.py:2564:    (4) iot_command -> TURN .
+   yacc.py:2565:
+   yacc.py:2686:    DOT             reduce using rule 4 (iot_command -> TURN .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 60
+   yacc.py:2562:
+   yacc.py:2564:    (5) iot_command -> SWITCH_STATE_TO .
+   yacc.py:2565:
+   yacc.py:2686:    DOT             reduce using rule 5 (iot_command -> SWITCH_STATE_TO .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 61
+   yacc.py:2562:
+   yacc.py:2564:    (12) iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command . DOT LSQB iot_cmd_argument RSQB
+   yacc.py:2565:
+   yacc.py:2686:    DOT             shift and go to state 67
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 62
+   yacc.py:2562:
+   yacc.py:2564:    (37) condition_instr -> if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts . END SEMICOLON
+   yacc.py:2564:    (19) assigment_stmts -> assigment_stmts . assigment SEMICOLON
+   yacc.py:2564:    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+   yacc.py:2564:    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+   yacc.py:2564:    (12) iot_object_expr -> . iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB
+   yacc.py:2564:    (2) iot_device -> . IDENT
+   yacc.py:2565:
+   yacc.py:2686:    END             shift and go to state 68
+   yacc.py:2686:    IDENT           shift and go to state 15
+   yacc.py:2688:
+   yacc.py:2713:    iot_device                     shift and go to state 18
+   yacc.py:2713:    iot_object_expr                shift and go to state 16
+   yacc.py:2713:    assigment                      shift and go to state 30
+   yacc.py:2560:
+   yacc.py:2561:state 63
+   yacc.py:2562:
+   yacc.py:2564:    (14) get_device_info -> GETVALUE .
+   yacc.py:2565:
+   yacc.py:2686:    EGREATER        reduce using rule 14 (get_device_info -> GETVALUE .)
+   yacc.py:2686:    GREATER         reduce using rule 14 (get_device_info -> GETVALUE .)
+   yacc.py:2686:    ELESS           reduce using rule 14 (get_device_info -> GETVALUE .)
+   yacc.py:2686:    LESS            reduce using rule 14 (get_device_info -> GETVALUE .)
+   yacc.py:2686:    EQUAL           reduce using rule 14 (get_device_info -> GETVALUE .)
+   yacc.py:2686:    NOTEQUAL        reduce using rule 14 (get_device_info -> GETVALUE .)
+   yacc.py:2686:    RPAREN          reduce using rule 14 (get_device_info -> GETVALUE .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 64
+   yacc.py:2562:
+   yacc.py:2564:    (13) get_device_info -> GETSTATE .
+   yacc.py:2565:
+   yacc.py:2686:    EGREATER        reduce using rule 13 (get_device_info -> GETSTATE .)
+   yacc.py:2686:    GREATER         reduce using rule 13 (get_device_info -> GETSTATE .)
+   yacc.py:2686:    ELESS           reduce using rule 13 (get_device_info -> GETSTATE .)
+   yacc.py:2686:    LESS            reduce using rule 13 (get_device_info -> GETSTATE .)
+   yacc.py:2686:    EQUAL           reduce using rule 13 (get_device_info -> GETSTATE .)
+   yacc.py:2686:    NOTEQUAL        reduce using rule 13 (get_device_info -> GETSTATE .)
+   yacc.py:2686:    RPAREN          reduce using rule 13 (get_device_info -> GETSTATE .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 65
+   yacc.py:2562:
+   yacc.py:2564:    (15) iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info .
+   yacc.py:2565:
+   yacc.py:2686:    EGREATER        reduce using rule 15 (iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info .)
+   yacc.py:2686:    GREATER         reduce using rule 15 (iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info .)
+   yacc.py:2686:    ELESS           reduce using rule 15 (iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info .)
+   yacc.py:2686:    LESS            reduce using rule 15 (iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info .)
+   yacc.py:2686:    EQUAL           reduce using rule 15 (iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info .)
+   yacc.py:2686:    NOTEQUAL        reduce using rule 15 (iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info .)
+   yacc.py:2686:    RPAREN          reduce using rule 15 (iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 66
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command . DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    DOT             shift and go to state 69
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 67
+   yacc.py:2562:
+   yacc.py:2564:    (12) iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT . LSQB iot_cmd_argument RSQB
+   yacc.py:2565:
+   yacc.py:2686:    LSQB            shift and go to state 70
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 68
+   yacc.py:2562:
+   yacc.py:2564:    (37) condition_instr -> if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END . SEMICOLON
+   yacc.py:2565:
+   yacc.py:2686:    SEMICOLON       shift and go to state 71
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 69
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT . LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    LSQB            shift and go to state 72
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 70
+   yacc.py:2562:
+   yacc.py:2564:    (12) iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB . iot_cmd_argument RSQB
+   yacc.py:2564:    (9) iot_cmd_argument -> . toggle_cmd_args
+   yacc.py:2564:    (10) iot_cmd_argument -> . NUMBER
+   yacc.py:2564:    (11) iot_cmd_argument -> . RANGE DOT LSQB NUMBER COMMA NUMBER RSQB
+   yacc.py:2564:    (7) toggle_cmd_args -> . CMDARG_ON
+   yacc.py:2564:    (8) toggle_cmd_args -> . CMDARG_OFF
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          shift and go to state 73
+   yacc.py:2686:    RANGE           shift and go to state 76
+   yacc.py:2686:    CMDARG_ON       shift and go to state 42
+   yacc.py:2686:    CMDARG_OFF      shift and go to state 44
+   yacc.py:2688:
+   yacc.py:2713:    toggle_cmd_args                shift and go to state 75
+   yacc.py:2713:    iot_cmd_argument               shift and go to state 74
+   yacc.py:2560:
+   yacc.py:2561:state 71
+   yacc.py:2562:
+   yacc.py:2564:    (37) condition_instr -> if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON .
+   yacc.py:2565:
+   yacc.py:2686:    FINISHP         reduce using rule 37 (condition_instr -> if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON .)
+   yacc.py:2686:    IF              reduce using rule 37 (condition_instr -> if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 72
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB . RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    RANGE           shift and go to state 77
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 73
+   yacc.py:2562:
+   yacc.py:2564:    (10) iot_cmd_argument -> NUMBER .
+   yacc.py:2565:
+   yacc.py:2686:    RSQB            reduce using rule 10 (iot_cmd_argument -> NUMBER .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 74
+   yacc.py:2562:
+   yacc.py:2564:    (12) iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument . RSQB
+   yacc.py:2565:
+   yacc.py:2686:    RSQB            shift and go to state 78
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 75
+   yacc.py:2562:
+   yacc.py:2564:    (9) iot_cmd_argument -> toggle_cmd_args .
+   yacc.py:2565:
+   yacc.py:2686:    RSQB            reduce using rule 9 (iot_cmd_argument -> toggle_cmd_args .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 76
+   yacc.py:2562:
+   yacc.py:2564:    (11) iot_cmd_argument -> RANGE . DOT LSQB NUMBER COMMA NUMBER RSQB
+   yacc.py:2565:
+   yacc.py:2686:    DOT             shift and go to state 79
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 77
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE . DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    DOT             shift and go to state 80
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 78
+   yacc.py:2562:
+   yacc.py:2564:    (12) iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB .
+   yacc.py:2565:
+   yacc.py:2686:    ASSIGN          reduce using rule 12 (iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 79
+   yacc.py:2562:
+   yacc.py:2564:    (11) iot_cmd_argument -> RANGE DOT . LSQB NUMBER COMMA NUMBER RSQB
+   yacc.py:2565:
+   yacc.py:2686:    LSQB            shift and go to state 81
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 80
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT . LSQB NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    LSQB            shift and go to state 82
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 81
+   yacc.py:2562:
+   yacc.py:2564:    (11) iot_cmd_argument -> RANGE DOT LSQB . NUMBER COMMA NUMBER RSQB
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          shift and go to state 83
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 82
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB . NUMBER COMMA NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          shift and go to state 84
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 83
+   yacc.py:2562:
+   yacc.py:2564:    (11) iot_cmd_argument -> RANGE DOT LSQB NUMBER . COMMA NUMBER RSQB
+   yacc.py:2565:
+   yacc.py:2686:    COMMA           shift and go to state 85
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 84
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER . COMMA NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    COMMA           shift and go to state 86
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 85
+   yacc.py:2562:
+   yacc.py:2564:    (11) iot_cmd_argument -> RANGE DOT LSQB NUMBER COMMA . NUMBER RSQB
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          shift and go to state 87
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 86
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA . NUMBER RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    NUMBER          shift and go to state 88
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 87
+   yacc.py:2562:
+   yacc.py:2564:    (11) iot_cmd_argument -> RANGE DOT LSQB NUMBER COMMA NUMBER . RSQB
+   yacc.py:2565:
+   yacc.py:2686:    RSQB            shift and go to state 89
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 88
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER . RSQB RSQB
+   yacc.py:2565:
+   yacc.py:2686:    RSQB            shift and go to state 90
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 89
+   yacc.py:2562:
+   yacc.py:2564:    (11) iot_cmd_argument -> RANGE DOT LSQB NUMBER COMMA NUMBER RSQB .
+   yacc.py:2565:
+   yacc.py:2686:    RSQB            reduce using rule 11 (iot_cmd_argument -> RANGE DOT LSQB NUMBER COMMA NUMBER RSQB .)
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 90
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB . RSQB
+   yacc.py:2565:
+   yacc.py:2686:    RSQB            shift and go to state 91
+   yacc.py:2688:
+   yacc.py:2560:
+   yacc.py:2561:state 91
+   yacc.py:2562:
+   yacc.py:2564:    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .
+   yacc.py:2565:
+   yacc.py:2686:    EGREATER        reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+   yacc.py:2686:    GREATER         reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+   yacc.py:2686:    ELESS           reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+   yacc.py:2686:    LESS            reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+   yacc.py:2686:    EQUAL           reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+   yacc.py:2686:    NOTEQUAL        reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+   yacc.py:2686:    RPAREN          reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+   yacc.py:2688:

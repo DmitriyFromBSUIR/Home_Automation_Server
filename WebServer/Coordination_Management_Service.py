@@ -219,7 +219,7 @@ class Transceiver:
     def run(self):
         self.transmit(False)
 
-def packetsGeneration(packets_max_count=20):
+def packetsGeneration(packets_max_count=20, isLogging=False):
     # generate 1000 pseudorandom packets
     dirsToGenPackets = JSON_Gen.start_test(packets_max_count)
     # fw = FileWorker(GEN_PACK_DIR, LOG_FILE_DIR)
@@ -230,8 +230,9 @@ def packetsGeneration(packets_max_count=20):
     otherJPTypes, linkAddressJPTypes = fw.run()
 
     print("LOG: otherJPTypes, linkAddressJPType :")
-    print(otherJPTypes)
-    print(linkAddressJPTypes)
+    if isLogging:
+        print(otherJPTypes)
+        print(linkAddressJPTypes)
 
     return (otherJPTypes, linkAddressJPTypes)
 

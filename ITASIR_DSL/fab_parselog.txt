@@ -1,0 +1,702 @@
+   yacc.py: 360:PLY: PARSE DEBUG START
+   yacc.py: 408:
+   yacc.py: 409:State  : 0
+   yacc.py: 433:Stack  : . LexToken(STARTP,'STARTP',1,5)
+   yacc.py: 443:Action : Shift and goto state 2
+   yacc.py: 408:
+   yacc.py: 409:State  : 2
+   yacc.py: 433:Stack  : STARTP . LexToken(IF,'if',1,38)
+   yacc.py: 443:Action : Shift and goto state 10
+   yacc.py: 408:
+   yacc.py: 409:State  : 10
+   yacc.py: 433:Stack  : STARTP IF . LexToken(LBRACE,'{',1,41)
+   yacc.py: 443:Action : Shift and goto state 21
+   yacc.py: 408:
+   yacc.py: 409:State  : 21
+   yacc.py: 433:Stack  : STARTP IF LBRACE . LexToken(LPAREN,'(',1,43)
+   yacc.py: 443:Action : Shift and goto state 30
+   yacc.py: 408:
+   yacc.py: 409:State  : 30
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN . LexToken(LPAREN,'(',1,44)
+   yacc.py: 443:Action : Shift and goto state 30
+   yacc.py: 408:
+   yacc.py: 409:State  : 30
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN . LexToken(IDENT,'lamp1',1,45)
+   yacc.py: 443:Action : Shift and goto state 11
+   yacc.py: 408:
+   yacc.py: 409:State  : 11
+   yacc.py: 428:Defaulted state 11: Reduce using 3
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_device -> IDENT] with ['lamp1'] and goto state 42
+   yacc.py: 504:Result : <str @ 0x1272680> ('lamp1')
+   yacc.py: 408:
+   yacc.py: 409:State  : 42
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device . LexToken(DOT,'.',1,50)
+   yacc.py: 443:Action : Shift and goto state 54
+   yacc.py: 408:
+   yacc.py: 409:State  : 54
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device DOT . LexToken(IDENT,'lamp1contr',1,51)
+   yacc.py: 443:Action : Shift and goto state 25
+   yacc.py: 408:
+   yacc.py: 409:State  : 25
+   yacc.py: 428:Defaulted state 25: Reduce using 4
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device DOT IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_dev_control -> IDENT] with ['lamp1contr'] and goto state 64
+   yacc.py: 504:Result : <str @ 0x12745c0> ('lamp1contr')
+   yacc.py: 408:
+   yacc.py: 409:State  : 64
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device DOT iot_dev_control . LexToken(DOT,'.',1,61)
+   yacc.py: 443:Action : Shift and goto state 70
+   yacc.py: 408:
+   yacc.py: 409:State  : 70
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device DOT iot_dev_control DOT . LexToken(GETSTATE,'getState',1,62)
+   yacc.py: 443:Action : Shift and goto state 79
+   yacc.py: 408:
+   yacc.py: 409:State  : 79
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device DOT iot_dev_control DOT GETSTATE . LexToken(EQUAL,'=',1,71)
+   yacc.py: 469:Action : Reduce rule [get_device_info -> GETSTATE] with ['getState'] and goto state 82
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 82
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device DOT iot_dev_control DOT get_device_info . LexToken(EQUAL,'=',1,71)
+   yacc.py: 469:Action : Reduce rule [iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info] with ['lamp1','.','lamp1contr','.',None] and goto state 43
+   yacc.py: 504:Result : <list @ 0x126c238> ([('lamp1', 'lamp1contr')])
+   yacc.py: 408:
+   yacc.py: 409:State  : 43
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device_get_info . LexToken(EQUAL,'=',1,71)
+   yacc.py: 443:Action : Shift and goto state 56
+   yacc.py: 408:
+   yacc.py: 409:State  : 56
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device_get_info EQUAL . LexToken(CMDARG_ON,'on',1,73)
+   yacc.py: 469:Action : Reduce rule [logical_comp -> EQUAL] with ['='] and goto state 55
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 55
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device_get_info logical_comp . LexToken(CMDARG_ON,'on',1,73)
+   yacc.py: 443:Action : Shift and goto state 32
+   yacc.py: 408:
+   yacc.py: 409:State  : 32
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device_get_info logical_comp CMDARG_ON . LexToken(RPAREN,')',1,75)
+   yacc.py: 469:Action : Reduce rule [toggle_cmd_args -> CMDARG_ON] with ['on'] and goto state 65
+   yacc.py: 504:Result : <str @ 0x12727e0> ('on')
+   yacc.py: 408:
+   yacc.py: 409:State  : 65
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device_get_info logical_comp toggle_cmd_args . LexToken(RPAREN,')',1,75)
+   yacc.py: 443:Action : Shift and goto state 71
+   yacc.py: 408:
+   yacc.py: 409:State  : 71
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN . LexToken(LOGIC_AND,'and',1,77)
+   yacc.py: 469:Action : Reduce rule [condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN] with ['(',<list @ 0x126c238>,None,'on',')'] and goto state 29
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 29
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition . LexToken(LOGIC_AND,'and',1,77)
+   yacc.py: 469:Action : Reduce rule [condition_list -> condition] with [None] and goto state 41
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 41
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list . LexToken(LOGIC_AND,'and',1,77)
+   yacc.py: 443:Action : Shift and goto state 40
+   yacc.py: 408:
+   yacc.py: 409:State  : 40
+   yacc.py: 428:Defaulted state 40: Reduce using 28
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list LOGIC_AND . None
+   yacc.py: 469:Action : Reduce rule [logical_operator -> LOGIC_AND] with ['and'] and goto state 37
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 37
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator . LexToken(LPAREN,'(',1,81)
+   yacc.py: 443:Action : Shift and goto state 50
+   yacc.py: 408:
+   yacc.py: 409:State  : 50
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN . LexToken(IDENT,'tempSensor1',1,82)
+   yacc.py: 443:Action : Shift and goto state 11
+   yacc.py: 408:
+   yacc.py: 409:State  : 11
+   yacc.py: 428:Defaulted state 11: Reduce using 3
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_device -> IDENT] with ['tempSensor1'] and goto state 42
+   yacc.py: 504:Result : <str @ 0x12745e8> ('tempSensor1')
+   yacc.py: 408:
+   yacc.py: 409:State  : 42
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device . LexToken(DOT,'.',1,93)
+   yacc.py: 443:Action : Shift and goto state 54
+   yacc.py: 408:
+   yacc.py: 409:State  : 54
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device DOT . LexToken(IDENT,'tempSensor1contr',1,94)
+   yacc.py: 443:Action : Shift and goto state 25
+   yacc.py: 408:
+   yacc.py: 409:State  : 25
+   yacc.py: 428:Defaulted state 25: Reduce using 4
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device DOT IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_dev_control -> IDENT] with [<str @ 0x126e950>] and goto state 64
+   yacc.py: 504:Result : <str @ 0x126e950> ('tempSensor1contr')
+   yacc.py: 408:
+   yacc.py: 409:State  : 64
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device DOT iot_dev_control . LexToken(DOT,'.',1,110)
+   yacc.py: 443:Action : Shift and goto state 70
+   yacc.py: 408:
+   yacc.py: 409:State  : 70
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device DOT iot_dev_control DOT . LexToken(GETVALUE,'getValue',1,111)
+   yacc.py: 443:Action : Shift and goto state 81
+   yacc.py: 408:
+   yacc.py: 409:State  : 81
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device DOT iot_dev_control DOT GETVALUE . LexToken(EQUAL,'=',1,120)
+   yacc.py: 469:Action : Reduce rule [get_device_info -> GETVALUE] with ['getValue'] and goto state 82
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 82
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device DOT iot_dev_control DOT get_device_info . LexToken(EQUAL,'=',1,120)
+   yacc.py: 469:Action : Reduce rule [iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info] with ['tempSensor1','.',<str @ 0x126e950>,'.',None] and goto state 43
+   yacc.py: 504:Result : <list @ 0x126c238> ([('lamp1', 'lamp1contr'), ('tempSensor1' ...)
+   yacc.py: 408:
+   yacc.py: 409:State  : 43
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device_get_info . LexToken(EQUAL,'=',1,120)
+   yacc.py: 443:Action : Shift and goto state 56
+   yacc.py: 408:
+   yacc.py: 409:State  : 56
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device_get_info EQUAL . LexToken(NUMBER,0,1,122)
+   yacc.py: 469:Action : Reduce rule [logical_comp -> EQUAL] with ['='] and goto state 55
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 55
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device_get_info logical_comp . LexToken(NUMBER,0,1,122)
+   yacc.py: 443:Action : Shift and goto state 66
+   yacc.py: 408:
+   yacc.py: 409:State  : 66
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device_get_info logical_comp NUMBER . LexToken(RPAREN,')',1,123)
+   yacc.py: 443:Action : Shift and goto state 72
+   yacc.py: 408:
+   yacc.py: 409:State  : 72
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator LPAREN iot_device_get_info logical_comp NUMBER RPAREN . LexToken(RPAREN,')',1,125)
+   yacc.py: 469:Action : Reduce rule [condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN] with ['(',<list @ 0x126c238>,None,0,')'] and goto state 51
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 51
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list logical_operator condition . LexToken(RPAREN,')',1,125)
+   yacc.py: 469:Action : Reduce rule [condition_list -> condition_list logical_operator condition] with [None,None,None] and goto state 41
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 41
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list . LexToken(RPAREN,')',1,125)
+   yacc.py: 443:Action : Shift and goto state 53
+   yacc.py: 408:
+   yacc.py: 409:State  : 53
+   yacc.py: 433:Stack  : STARTP IF LBRACE LPAREN condition_list RPAREN . LexToken(LOGIC_OR,'or',1,127)
+   yacc.py: 469:Action : Reduce rule [condition_list -> LPAREN condition_list RPAREN] with ['(',None,')'] and goto state 28
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 28
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list . LexToken(LOGIC_OR,'or',1,127)
+   yacc.py: 443:Action : Shift and goto state 39
+   yacc.py: 408:
+   yacc.py: 409:State  : 39
+   yacc.py: 428:Defaulted state 39: Reduce using 29
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list LOGIC_OR . None
+   yacc.py: 469:Action : Reduce rule [logical_operator -> LOGIC_OR] with ['or'] and goto state 37
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 37
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator . LexToken(LPAREN,'(',1,130)
+   yacc.py: 443:Action : Shift and goto state 50
+   yacc.py: 408:
+   yacc.py: 409:State  : 50
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN . LexToken(IDENT,'lamp2',1,131)
+   yacc.py: 443:Action : Shift and goto state 11
+   yacc.py: 408:
+   yacc.py: 409:State  : 11
+   yacc.py: 428:Defaulted state 11: Reduce using 3
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_device -> IDENT] with ['lamp2'] and goto state 42
+   yacc.py: 504:Result : <str @ 0x1272720> ('lamp2')
+   yacc.py: 408:
+   yacc.py: 409:State  : 42
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device . LexToken(DOT,'.',1,136)
+   yacc.py: 443:Action : Shift and goto state 54
+   yacc.py: 408:
+   yacc.py: 409:State  : 54
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device DOT . LexToken(IDENT,'lamp2contr',1,137)
+   yacc.py: 443:Action : Shift and goto state 25
+   yacc.py: 408:
+   yacc.py: 409:State  : 25
+   yacc.py: 428:Defaulted state 25: Reduce using 4
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device DOT IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_dev_control -> IDENT] with ['lamp2contr'] and goto state 64
+   yacc.py: 504:Result : <str @ 0x1274700> ('lamp2contr')
+   yacc.py: 408:
+   yacc.py: 409:State  : 64
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device DOT iot_dev_control . LexToken(DOT,'.',1,147)
+   yacc.py: 443:Action : Shift and goto state 70
+   yacc.py: 408:
+   yacc.py: 409:State  : 70
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device DOT iot_dev_control DOT . LexToken(GETSTATE,'getState',1,148)
+   yacc.py: 443:Action : Shift and goto state 79
+   yacc.py: 408:
+   yacc.py: 409:State  : 79
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device DOT iot_dev_control DOT GETSTATE . LexToken(EQUAL,'=',1,157)
+   yacc.py: 469:Action : Reduce rule [get_device_info -> GETSTATE] with ['getState'] and goto state 82
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 82
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device DOT iot_dev_control DOT get_device_info . LexToken(EQUAL,'=',1,157)
+   yacc.py: 469:Action : Reduce rule [iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info] with ['lamp2','.','lamp2contr','.',None] and goto state 43
+   yacc.py: 504:Result : <list @ 0x126c238> ([('lamp1', 'lamp1contr'), ('tempSensor1' ...)
+   yacc.py: 408:
+   yacc.py: 409:State  : 43
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device_get_info . LexToken(EQUAL,'=',1,157)
+   yacc.py: 443:Action : Shift and goto state 56
+   yacc.py: 408:
+   yacc.py: 409:State  : 56
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device_get_info EQUAL . LexToken(CMDARG_OFF,'off',1,159)
+   yacc.py: 469:Action : Reduce rule [logical_comp -> EQUAL] with ['='] and goto state 55
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 55
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device_get_info logical_comp . LexToken(CMDARG_OFF,'off',1,159)
+   yacc.py: 443:Action : Shift and goto state 31
+   yacc.py: 408:
+   yacc.py: 409:State  : 31
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device_get_info logical_comp CMDARG_OFF . LexToken(RPAREN,')',1,162)
+   yacc.py: 469:Action : Reduce rule [toggle_cmd_args -> CMDARG_OFF] with ['off'] and goto state 65
+   yacc.py: 504:Result : <str @ 0x12726c0> ('off')
+   yacc.py: 408:
+   yacc.py: 409:State  : 65
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device_get_info logical_comp toggle_cmd_args . LexToken(RPAREN,')',1,162)
+   yacc.py: 443:Action : Shift and goto state 71
+   yacc.py: 408:
+   yacc.py: 409:State  : 71
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN . LexToken(RBRACE,'}',1,164)
+   yacc.py: 469:Action : Reduce rule [condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN] with ['(',<list @ 0x126c238>,None,'off',')'] and goto state 51
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 51
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list logical_operator condition . LexToken(RBRACE,'}',1,164)
+   yacc.py: 469:Action : Reduce rule [condition_list -> condition_list logical_operator condition] with [None,None,None] and goto state 28
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 28
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list . LexToken(RBRACE,'}',1,164)
+   yacc.py: 443:Action : Shift and goto state 38
+   yacc.py: 408:
+   yacc.py: 409:State  : 38
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list RBRACE . LexToken(THEN,'then',1,166)
+   yacc.py: 443:Action : Shift and goto state 52
+   yacc.py: 408:
+   yacc.py: 409:State  : 52
+   yacc.py: 428:Defaulted state 52: Reduce using 38
+   yacc.py: 433:Stack  : STARTP IF LBRACE condition_list RBRACE THEN . None
+   yacc.py: 469:Action : Reduce rule [if_stmt -> IF LBRACE condition_list RBRACE THEN] with ['if','{',None,'}','then'] and goto state 5
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 5
+   yacc.py: 433:Stack  : STARTP if_stmt . LexToken(BEGIN,'begin',1,175)
+   yacc.py: 443:Action : Shift and goto state 15
+   yacc.py: 408:
+   yacc.py: 409:State  : 15
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN . LexToken(IDENT,'tempSensor2',1,189)
+   yacc.py: 443:Action : Shift and goto state 11
+   yacc.py: 408:
+   yacc.py: 409:State  : 11
+   yacc.py: 428:Defaulted state 11: Reduce using 3
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_device -> IDENT] with ['tempSensor2'] and goto state 4
+   yacc.py: 504:Result : <str @ 0x1274778> ('tempSensor2')
+   yacc.py: 408:
+   yacc.py: 409:State  : 4
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device . LexToken(DOT,'.',1,200)
+   yacc.py: 443:Action : Shift and goto state 14
+   yacc.py: 408:
+   yacc.py: 409:State  : 14
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT . LexToken(IDENT,'ts2c',1,201)
+   yacc.py: 443:Action : Shift and goto state 25
+   yacc.py: 408:
+   yacc.py: 409:State  : 25
+   yacc.py: 428:Defaulted state 25: Reduce using 4
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_dev_control -> IDENT] with ['ts2c'] and goto state 24
+   yacc.py: 504:Result : <str @ 0x1272860> ('ts2c')
+   yacc.py: 408:
+   yacc.py: 409:State  : 24
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control . LexToken(DOT,'.',1,205)
+   yacc.py: 443:Action : Shift and goto state 35
+   yacc.py: 408:
+   yacc.py: 409:State  : 35
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control DOT . LexToken(TURN,'turn',1,206)
+   yacc.py: 443:Action : Shift and goto state 46
+   yacc.py: 408:
+   yacc.py: 409:State  : 46
+   yacc.py: 428:Defaulted state 46: Reduce using 5
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control DOT TURN . None
+   yacc.py: 469:Action : Reduce rule [iot_command -> TURN] with ['turn'] and goto state 44
+   yacc.py: 504:Result : <str @ 0x1272780> ('turn')
+   yacc.py: 408:
+   yacc.py: 409:State  : 44
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control DOT iot_command . LexToken(DOT,'.',1,210)
+   yacc.py: 443:Action : Shift and goto state 62
+   yacc.py: 408:
+   yacc.py: 409:State  : 62
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control DOT iot_command DOT . LexToken(LSQB,'[',1,211)
+   yacc.py: 443:Action : Shift and goto state 68
+   yacc.py: 408:
+   yacc.py: 409:State  : 68
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control DOT iot_command DOT LSQB . LexToken(CMDARG_OFF,'off',1,212)
+   yacc.py: 443:Action : Shift and goto state 31
+   yacc.py: 408:
+   yacc.py: 409:State  : 31
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control DOT iot_command DOT LSQB CMDARG_OFF . LexToken(RSQB,']',1,215)
+   yacc.py: 469:Action : Reduce rule [toggle_cmd_args -> CMDARG_OFF] with ['off'] and goto state 76
+   yacc.py: 504:Result : <str @ 0x12726a0> ('off')
+   yacc.py: 408:
+   yacc.py: 409:State  : 76
+   yacc.py: 428:Defaulted state 76: Reduce using 10
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control DOT iot_command DOT LSQB toggle_cmd_args . LexToken(RSQB,']',1,215)
+   yacc.py: 469:Action : Reduce rule [iot_cmd_argument -> toggle_cmd_args] with ['off'] and goto state 75
+   yacc.py: 504:Result : <str @ 0x12726a0> ('off')
+   yacc.py: 408:
+   yacc.py: 409:State  : 75
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument . LexToken(RSQB,']',1,215)
+   yacc.py: 443:Action : Shift and goto state 83
+   yacc.py: 408:
+   yacc.py: 409:State  : 83
+   yacc.py: 428:Defaulted state 83: Reduce using 13
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB . None
+   yacc.py: 469:Action : Reduce rule [iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB] with ['tempSensor2','.','ts2c','.','turn','.','[','off',']'] and goto state 12
+   yacc.py: 504:Result : <list @ 0x126c2b0> ([('tempSensor2', 'ts2c')])
+   yacc.py: 408:
+   yacc.py: 409:State  : 12
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_object_expr . LexToken(ASSIGN,':=',1,217)
+   yacc.py: 443:Action : Shift and goto state 22
+   yacc.py: 408:
+   yacc.py: 409:State  : 22
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_object_expr ASSIGN . LexToken(CMDARG_ON,'on',1,220)
+   yacc.py: 443:Action : Shift and goto state 32
+   yacc.py: 408:
+   yacc.py: 409:State  : 32
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_object_expr ASSIGN CMDARG_ON . LexToken(SEMICOLON,';',1,222)
+   yacc.py: 469:Action : Reduce rule [toggle_cmd_args -> CMDARG_ON] with ['on'] and goto state 33
+   yacc.py: 504:Result : <str @ 0x1272900> ('on')
+   yacc.py: 408:
+   yacc.py: 409:State  : 33
+   yacc.py: 428:Defaulted state 33: Reduce using 19
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN iot_object_expr ASSIGN toggle_cmd_args . LexToken(SEMICOLON,';',1,222)
+   yacc.py: 469:Action : Reduce rule [assigment -> iot_object_expr ASSIGN toggle_cmd_args] with [<list @ 0x126c2b0>,':=','on'] and goto state 7
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 7
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment . LexToken(SEMICOLON,';',1,222)
+   yacc.py: 443:Action : Shift and goto state 16
+   yacc.py: 408:
+   yacc.py: 409:State  : 16
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment SEMICOLON . LexToken(IDENT,'lamp3',1,232)
+   yacc.py: 469:Action : Reduce rule [assigment_stmts -> assigment SEMICOLON] with [None,';'] and goto state 26
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 26
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts . LexToken(IDENT,'lamp3',1,232)
+   yacc.py: 443:Action : Shift and goto state 11
+   yacc.py: 408:
+   yacc.py: 409:State  : 11
+   yacc.py: 428:Defaulted state 11: Reduce using 3
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_device -> IDENT] with ['lamp3'] and goto state 4
+   yacc.py: 504:Result : <str @ 0x12728c0> ('lamp3')
+   yacc.py: 408:
+   yacc.py: 409:State  : 4
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device . LexToken(DOT,'.',1,237)
+   yacc.py: 443:Action : Shift and goto state 14
+   yacc.py: 408:
+   yacc.py: 409:State  : 14
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT . LexToken(IDENT,'l3c',1,238)
+   yacc.py: 443:Action : Shift and goto state 25
+   yacc.py: 408:
+   yacc.py: 409:State  : 25
+   yacc.py: 428:Defaulted state 25: Reduce using 4
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_dev_control -> IDENT] with ['l3c'] and goto state 24
+   yacc.py: 504:Result : <str @ 0x1272600> ('l3c')
+   yacc.py: 408:
+   yacc.py: 409:State  : 24
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control . LexToken(DOT,'.',1,241)
+   yacc.py: 443:Action : Shift and goto state 35
+   yacc.py: 408:
+   yacc.py: 409:State  : 35
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT . LexToken(TURN,'turn',1,242)
+   yacc.py: 443:Action : Shift and goto state 46
+   yacc.py: 408:
+   yacc.py: 409:State  : 46
+   yacc.py: 428:Defaulted state 46: Reduce using 5
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT TURN . None
+   yacc.py: 469:Action : Reduce rule [iot_command -> TURN] with ['turn'] and goto state 44
+   yacc.py: 504:Result : <str @ 0x1272740> ('turn')
+   yacc.py: 408:
+   yacc.py: 409:State  : 44
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command . LexToken(DOT,'.',1,246)
+   yacc.py: 443:Action : Shift and goto state 62
+   yacc.py: 408:
+   yacc.py: 409:State  : 62
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT . LexToken(LSQB,'[',1,247)
+   yacc.py: 443:Action : Shift and goto state 68
+   yacc.py: 408:
+   yacc.py: 409:State  : 68
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB . LexToken(CMDARG_OFF,'off',1,248)
+   yacc.py: 443:Action : Shift and goto state 31
+   yacc.py: 408:
+   yacc.py: 409:State  : 31
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB CMDARG_OFF . LexToken(RSQB,']',1,251)
+   yacc.py: 469:Action : Reduce rule [toggle_cmd_args -> CMDARG_OFF] with ['off'] and goto state 76
+   yacc.py: 504:Result : <str @ 0x1272620> ('off')
+   yacc.py: 408:
+   yacc.py: 409:State  : 76
+   yacc.py: 428:Defaulted state 76: Reduce using 10
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB toggle_cmd_args . LexToken(RSQB,']',1,251)
+   yacc.py: 469:Action : Reduce rule [iot_cmd_argument -> toggle_cmd_args] with ['off'] and goto state 75
+   yacc.py: 504:Result : <str @ 0x1272620> ('off')
+   yacc.py: 408:
+   yacc.py: 409:State  : 75
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument . LexToken(RSQB,']',1,251)
+   yacc.py: 443:Action : Shift and goto state 83
+   yacc.py: 408:
+   yacc.py: 409:State  : 83
+   yacc.py: 428:Defaulted state 83: Reduce using 13
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB . None
+   yacc.py: 469:Action : Reduce rule [iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB] with ['lamp3','.','l3c','.','turn','.','[','off',']'] and goto state 12
+   yacc.py: 504:Result : <list @ 0x126c2b0> ([('tempSensor2', 'ts2c'), ('lamp3', 'l3c ...)
+   yacc.py: 408:
+   yacc.py: 409:State  : 12
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr . LexToken(ASSIGN,':=',1,253)
+   yacc.py: 443:Action : Shift and goto state 22
+   yacc.py: 408:
+   yacc.py: 409:State  : 22
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr ASSIGN . LexToken(CMDARG_ON,'on',1,256)
+   yacc.py: 443:Action : Shift and goto state 32
+   yacc.py: 408:
+   yacc.py: 409:State  : 32
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr ASSIGN CMDARG_ON . LexToken(SEMICOLON,';',1,258)
+   yacc.py: 469:Action : Reduce rule [toggle_cmd_args -> CMDARG_ON] with ['on'] and goto state 33
+   yacc.py: 504:Result : <str @ 0x12729a0> ('on')
+   yacc.py: 408:
+   yacc.py: 409:State  : 33
+   yacc.py: 428:Defaulted state 33: Reduce using 19
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr ASSIGN toggle_cmd_args . LexToken(SEMICOLON,';',1,258)
+   yacc.py: 469:Action : Reduce rule [assigment -> iot_object_expr ASSIGN toggle_cmd_args] with [<list @ 0x126c2b0>,':=','on'] and goto state 17
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 17
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts assigment . LexToken(SEMICOLON,';',1,258)
+   yacc.py: 443:Action : Shift and goto state 27
+   yacc.py: 408:
+   yacc.py: 409:State  : 27
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts assigment SEMICOLON . LexToken(IDENT,'selector1',1,268)
+   yacc.py: 469:Action : Reduce rule [assigment_stmts -> assigment_stmts assigment SEMICOLON] with [None,None,';'] and goto state 26
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 26
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts . LexToken(IDENT,'selector1',1,268)
+   yacc.py: 443:Action : Shift and goto state 11
+   yacc.py: 408:
+   yacc.py: 409:State  : 11
+   yacc.py: 428:Defaulted state 11: Reduce using 3
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_device -> IDENT] with ['selector1'] and goto state 4
+   yacc.py: 504:Result : <str @ 0x12747f0> ('selector1')
+   yacc.py: 408:
+   yacc.py: 409:State  : 4
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device . LexToken(DOT,'.',1,277)
+   yacc.py: 443:Action : Shift and goto state 14
+   yacc.py: 408:
+   yacc.py: 409:State  : 14
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT . LexToken(IDENT,'s1c',1,278)
+   yacc.py: 443:Action : Shift and goto state 25
+   yacc.py: 408:
+   yacc.py: 409:State  : 25
+   yacc.py: 428:Defaulted state 25: Reduce using 4
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_dev_control -> IDENT] with ['s1c'] and goto state 24
+   yacc.py: 504:Result : <str @ 0x1272880> ('s1c')
+   yacc.py: 408:
+   yacc.py: 409:State  : 24
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control . LexToken(DOT,'.',1,281)
+   yacc.py: 443:Action : Shift and goto state 35
+   yacc.py: 408:
+   yacc.py: 409:State  : 35
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT . LexToken(SWITCH_STATE_TO,'switch_state_to',1,282)
+   yacc.py: 443:Action : Shift and goto state 47
+   yacc.py: 408:
+   yacc.py: 409:State  : 47
+   yacc.py: 428:Defaulted state 47: Reduce using 6
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT SWITCH_STATE_TO . None
+   yacc.py: 469:Action : Reduce rule [iot_command -> SWITCH_STATE_TO] with [<str @ 0x1274818>] and goto state 44
+   yacc.py: 504:Result : <str @ 0x1274818> ('switch_state_to')
+   yacc.py: 408:
+   yacc.py: 409:State  : 44
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command . LexToken(DOT,'.',1,297)
+   yacc.py: 443:Action : Shift and goto state 62
+   yacc.py: 408:
+   yacc.py: 409:State  : 62
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT . LexToken(LSQB,'[',1,298)
+   yacc.py: 443:Action : Shift and goto state 68
+   yacc.py: 408:
+   yacc.py: 409:State  : 68
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB . LexToken(NUMBER,3,1,299)
+   yacc.py: 443:Action : Shift and goto state 74
+   yacc.py: 408:
+   yacc.py: 409:State  : 74
+   yacc.py: 428:Defaulted state 74: Reduce using 11
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB NUMBER . None
+   yacc.py: 469:Action : Reduce rule [iot_cmd_argument -> NUMBER] with [3] and goto state 75
+   yacc.py: 504:Result : <int @ 0x5bba3730> (3)
+   yacc.py: 408:
+   yacc.py: 409:State  : 75
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument . LexToken(RSQB,']',1,300)
+   yacc.py: 443:Action : Shift and goto state 83
+   yacc.py: 408:
+   yacc.py: 409:State  : 83
+   yacc.py: 428:Defaulted state 83: Reduce using 13
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB . None
+   yacc.py: 469:Action : Reduce rule [iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB] with ['selector1','.','s1c','.',<str @ 0x1274818>,'.','[',3,']'] and goto state 12
+   yacc.py: 504:Result : <list @ 0x126c2b0> ([('tempSensor2', 'ts2c'), ('lamp3', 'l3c ...)
+   yacc.py: 408:
+   yacc.py: 409:State  : 12
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr . LexToken(ASSIGN,':=',1,302)
+   yacc.py: 443:Action : Shift and goto state 22
+   yacc.py: 408:
+   yacc.py: 409:State  : 22
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr ASSIGN . LexToken(NUMBER,5,1,305)
+   yacc.py: 443:Action : Shift and goto state 34
+   yacc.py: 408:
+   yacc.py: 409:State  : 34
+   yacc.py: 428:Defaulted state 34: Reduce using 18
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr ASSIGN NUMBER . None
+   yacc.py: 469:Action : Reduce rule [assigment -> iot_object_expr ASSIGN NUMBER] with [<list @ 0x126c2b0>,':=',5] and goto state 17
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 17
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts assigment . LexToken(SEMICOLON,';',1,306)
+   yacc.py: 443:Action : Shift and goto state 27
+   yacc.py: 408:
+   yacc.py: 409:State  : 27
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts assigment SEMICOLON . LexToken(IDENT,'dimmer1',1,316)
+   yacc.py: 469:Action : Reduce rule [assigment_stmts -> assigment_stmts assigment SEMICOLON] with [None,None,';'] and goto state 26
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 26
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts . LexToken(IDENT,'dimmer1',1,316)
+   yacc.py: 443:Action : Shift and goto state 11
+   yacc.py: 408:
+   yacc.py: 409:State  : 11
+   yacc.py: 428:Defaulted state 11: Reduce using 3
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_device -> IDENT] with ['dimmer1'] and goto state 4
+   yacc.py: 504:Result : <str @ 0x12726a0> ('dimmer1')
+   yacc.py: 408:
+   yacc.py: 409:State  : 4
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device . LexToken(DOT,'.',1,323)
+   yacc.py: 443:Action : Shift and goto state 14
+   yacc.py: 408:
+   yacc.py: 409:State  : 14
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT . LexToken(IDENT,'d1c',1,324)
+   yacc.py: 443:Action : Shift and goto state 25
+   yacc.py: 408:
+   yacc.py: 409:State  : 25
+   yacc.py: 428:Defaulted state 25: Reduce using 4
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT IDENT . None
+   yacc.py: 469:Action : Reduce rule [iot_dev_control -> IDENT] with ['d1c'] and goto state 24
+   yacc.py: 504:Result : <str @ 0x1272960> ('d1c')
+   yacc.py: 408:
+   yacc.py: 409:State  : 24
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control . LexToken(DOT,'.',1,327)
+   yacc.py: 443:Action : Shift and goto state 35
+   yacc.py: 408:
+   yacc.py: 409:State  : 35
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT . LexToken(DIMMER,'dimmer',1,328)
+   yacc.py: 443:Action : Shift and goto state 45
+   yacc.py: 408:
+   yacc.py: 409:State  : 45
+   yacc.py: 428:Defaulted state 45: Reduce using 7
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT DIMMER . None
+   yacc.py: 469:Action : Reduce rule [iot_command -> DIMMER] with ['dimmer'] and goto state 44
+   yacc.py: 504:Result : <str @ 0x12727c0> ('dimmer')
+   yacc.py: 408:
+   yacc.py: 409:State  : 44
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command . LexToken(DOT,'.',1,334)
+   yacc.py: 443:Action : Shift and goto state 62
+   yacc.py: 408:
+   yacc.py: 409:State  : 62
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT . LexToken(LSQB,'[',1,335)
+   yacc.py: 443:Action : Shift and goto state 68
+   yacc.py: 408:
+   yacc.py: 409:State  : 68
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB . LexToken(NUMBER,25,1,336)
+   yacc.py: 443:Action : Shift and goto state 74
+   yacc.py: 408:
+   yacc.py: 409:State  : 74
+   yacc.py: 428:Defaulted state 74: Reduce using 11
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB NUMBER . None
+   yacc.py: 469:Action : Reduce rule [iot_cmd_argument -> NUMBER] with [25] and goto state 75
+   yacc.py: 504:Result : <int @ 0x5bba3890> (25)
+   yacc.py: 408:
+   yacc.py: 409:State  : 75
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument . LexToken(RSQB,']',1,338)
+   yacc.py: 443:Action : Shift and goto state 83
+   yacc.py: 408:
+   yacc.py: 409:State  : 83
+   yacc.py: 428:Defaulted state 83: Reduce using 13
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB . None
+   yacc.py: 469:Action : Reduce rule [iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB] with ['dimmer1','.','d1c','.','dimmer','.','[',25,']'] and goto state 12
+   yacc.py: 504:Result : <list @ 0x126c2b0> ([('tempSensor2', 'ts2c'), ('lamp3', 'l3c ...)
+   yacc.py: 408:
+   yacc.py: 409:State  : 12
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr . LexToken(ASSIGN,':=',1,340)
+   yacc.py: 443:Action : Shift and goto state 22
+   yacc.py: 408:
+   yacc.py: 409:State  : 22
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr ASSIGN . LexToken(NUMBER,50,1,343)
+   yacc.py: 443:Action : Shift and goto state 34
+   yacc.py: 408:
+   yacc.py: 409:State  : 34
+   yacc.py: 428:Defaulted state 34: Reduce using 18
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts iot_object_expr ASSIGN NUMBER . None
+   yacc.py: 469:Action : Reduce rule [assigment -> iot_object_expr ASSIGN NUMBER] with [<list @ 0x126c2b0>,':=',50] and goto state 17
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 17
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts assigment . LexToken(SEMICOLON,';',1,345)
+   yacc.py: 443:Action : Shift and goto state 27
+   yacc.py: 408:
+   yacc.py: 409:State  : 27
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts assigment SEMICOLON . LexToken(END,'end',1,351)
+   yacc.py: 469:Action : Reduce rule [assigment_stmts -> assigment_stmts assigment SEMICOLON] with [None,None,';'] and goto state 26
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 26
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts . LexToken(END,'end',1,351)
+   yacc.py: 443:Action : Shift and goto state 36
+   yacc.py: 408:
+   yacc.py: 409:State  : 36
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts END . LexToken(SEMICOLON,';',1,354)
+   yacc.py: 443:Action : Shift and goto state 49
+   yacc.py: 408:
+   yacc.py: 409:State  : 49
+   yacc.py: 433:Stack  : STARTP if_stmt BEGIN assigment_stmts END SEMICOLON . LexToken(FINISHP,'FINISHP',1,361)
+   yacc.py: 469:Action : Reduce rule [condition_instr -> if_stmt BEGIN assigment_stmts END SEMICOLON] with [None,'begin',None,'end',';'] and goto state 6
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 6
+   yacc.py: 433:Stack  : STARTP condition_instr . LexToken(FINISHP,'FINISHP',1,361)
+   yacc.py: 469:Action : Reduce rule [programm_body -> condition_instr] with [None] and goto state 9
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 9
+   yacc.py: 433:Stack  : STARTP programm_body . LexToken(FINISHP,'FINISHP',1,361)
+   yacc.py: 443:Action : Shift and goto state 18
+   yacc.py: 408:
+   yacc.py: 409:State  : 18
+   yacc.py: 428:Defaulted state 18: Reduce using 2
+   yacc.py: 433:Stack  : STARTP programm_body FINISHP . None
+   yacc.py: 469:Action : Reduce rule [programm_struct -> STARTP programm_body FINISHP] with ['STARTP',None,'FINISHP'] and goto state 1
+   yacc.py: 504:Result : <NoneType @ 0x5bb86998> (None)
+   yacc.py: 408:
+   yacc.py: 409:State  : 1
+   yacc.py: 433:Stack  : programm_struct . $end
+   yacc.py: 569:Done   : Returning <NoneType @ 0x5bb86998> (None)
+   yacc.py: 570:PLY: PARSE DEBUG END
