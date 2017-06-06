@@ -1,14 +1,22 @@
 {
-    "type": "data",
+    "type": "dev_changes",
   	"dev_id": "Unique_str",
-  	"data": [
+  	"controls": [
   	{
-      "id": "Unique_Str",
+      	"ctrl_id": ["0", "8192"],
    	 	"state": ["on", "off"]
   	},
     {
-	  	"id": "Unique_Str",
+	  	"ctrl_id": ["0", "8192"],
     	"state": ["0", "1024"]
+  	},
+	{
+	  	"ctrl_id": ["0", "8192"],
+    	"state": ["0", "100"]
+  	},
+	{
+	  	"ctrl_id": ["0", "8192"],
+    	"state": ["0", "4096"]
   	}
   	],
   	"time_stamp": "01/01/1970"

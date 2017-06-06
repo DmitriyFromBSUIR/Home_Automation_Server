@@ -216,12 +216,53 @@ class JSON_Packets_Gen:
                 id += word
             # generating state
             stateSelector = rnd.randint(0, len(listOfStatesBorders) - 1)
+            #stateSelector = rnd.randint(0, 1)
             statesList = listOfStatesBorders[i][stateSelector]
             isNumericState = False
             state = 0
             if statesList != "on" and statesList != "off":
                 isNumericState = True
             keys = ("id", "state")
+            if isNumericState:
+                state = rnd.randint(int(listOfStatesBorders[i][0]), int(
+                    listOfStatesBorders[i][1]) - 1)
+                keysData = (id, state)
+            else:
+                keysData = (id, statesList)
+            id_state_pair = dict(zip(keys, keysData))
+            # add new generated data to general list
+            # generatedData.append(id_state_pair)
+            dataList.append(id_state_pair)
+        packet.update({key: dataList})
+
+    def controlsSectionGenerate(self, fakerObj, key, template_packet, packet):
+        # count of controls in smart device
+        elementsCount = len(ACTIONS)
+        # dict for this field
+        id_state_pair = dict()
+        # list for states borders
+        listOfStatesBorders = list()
+        # list for result data construction
+        dataList = list()
+        for curDict in template_packet["controls"]:
+            listOfStatesBorders.append(curDict.get('state'))
+        # generating id and states
+        for i in range(0, elementsCount):
+            # generating id
+            id = ""
+            words = fakerObj.words(nb=3)
+            for word in words:
+                id += word
+            # generating state
+            #stateSelector = rnd.randint(0, len(listOfStatesBorders) - 1)
+            stateSelector = rnd.randint(0, 1)
+            statesList = listOfStatesBorders[i][stateSelector]
+            isNumericState = False
+            state = 0
+            if (statesList != "on" and statesList != "off") and (statesList != "true" and statesList != "false"):
+                isNumericState = True
+            # keys = ("id", "state")
+            keys = ("ctrl_id", "state")
             if isNumericState:
                 state = rnd.randint(int(listOfStatesBorders[i][0]), int(
                     listOfStatesBorders[i][1]) - 1)
@@ -244,16 +285,19 @@ class JSON_Packets_Gen:
                 for key, value in template_data.items():
                     if key == "type":
                         data_packet.update({key: template_data[key]})
-                    #if key == "dev_id":
-                    if key == "ctrl_id":
+                    if key == "dev_id":
                         self.devIdSectionGenerate(fake, key, data_packet)
-                    if key == "data":
-                        self.dataSectionGenerate(fake, key, template_data, data_packet)
+                    #if key == "data":
+                    if key == "controls":
+                        #self.dataSectionGenerate(fake, key, template_data, data_packet)
+                        self.controlsSectionGenerate(fake, key, template_data, data_packet)
                     if key == "time_stamp":
                         date = self.dateGenerate()
                         data_packet.update({key: date})
             #packet.update({"data_packet": data_packet})
             packet.update({"changes_packet": data_packet})
+            print("==================== Packet Type #",  1,  "====================")
+            print(packet)
             return data_packet
         else:
             raise Exception("Error! Incorrect 'dirToDataPackType'.")
@@ -303,6 +347,12 @@ class JSON_Packets_Gen:
             if key == "type":
                 # generatedData.append(self._jsonTPacketData[templateNumber][key])
                 packet.update({key: self._jsonTPacketData[templateNumber][key]})
+
+            # if Data Pack then generate whole packet and break
+            if self._jsonTPacketData[templateNumber][key] == "dev_changes":
+                packet = self.dataPacketSectionGenerate(packet, DATA_PACK_TYPE_DIR)
+                break
+
             if key == "dev_id":
                 selector = rnd.randint(0, 1)
                 if selector == 0:
@@ -363,7 +413,8 @@ class JSON_Packets_Gen:
                 packet.update({key: devices_type})
             #if key == "actions":
             if key == "controls":
-                actionsCount = len(ACTIONS)
+                #actionsCount = len(ACTIONS)
+                actionsCount = len(ACTIONS_NAMES)
                 # dict for this field
                 action_info = dict()
                 # list for states borders
@@ -374,6 +425,7 @@ class JSON_Packets_Gen:
                     listOfStatesBorders.append(curDict.get('state'))
                 # generating id and states
                 for i in range(0, actionsCount):
+                    #print(i)
                     # generating name for control
                     name = ""
                     words = fake.words(nb=3)
@@ -381,9 +433,11 @@ class JSON_Packets_Gen:
                         name += word
                     # generate id for control
                     #idBorder = self._jsonTPacketData[templateNumber][key][i].get('id')
+                    #print("i=",i)
                     idBorder = self._jsonTPacketData[templateNumber][key][i].get('ctrl_id')
                     #print("idBorder = ", idBorder)
                     id = rnd.randint(int(idBorder[0]), int(idBorder[1]) - 1)
+                    #id =
                     # select control_type from Globals
                     controlTypeSelector = rnd.randint(0, actionsCount - 1)
                     actionName = ACTIONS_NAMES[controlTypeSelector]
@@ -413,7 +467,18 @@ class JSON_Packets_Gen:
                     '''
                     #keys = ("name", "act_id", "type")
                     keys = ("name", "ctrl_id", "type")
-                    keysData = (name, id, control_type)
+                    control_type_src_data = dict()
+                    control_type_src_data.update({"name": control_type})
+                    opt_data = dict()
+                    keysData = None
+                    if control_type == "switch_state":
+                        d_states_count = rnd.randint(1, 32)
+                        d_states_names = fake.words(nb=d_states_count)
+                        opt_data.update({"names": d_states_names})
+                        control_type_src_data.update({"optional": opt_data})
+                    else:
+                        control_type_src_data.update({"optional": opt_data})
+                    keysData = (name, id, control_type_src_data)
                     action_info = dict(zip(keys, keysData))
                     # add new generated data to general list
                     # generatedData.append(action_info)
@@ -510,6 +575,7 @@ class JSON_Packets_Gen:
                     token += number + word
                 packet.update({key: token})
             #if key == "data_packet":
+            #if key == "changes_packet":
             if key == "changes_packet":
                 self.dataPacketSectionGenerate(packet, DATA_PACK_TYPE_DIR)
         # write data to json file
@@ -572,7 +638,8 @@ def start_test(MAX_JSON_PACKETS_COUNT):
         10% (0.1) ErrorServicePacket.json
         10% (0.1) LinkAddressPacket.json
         '''
-        jpGen.run([0.4, 0.1, 0.3, 0.1, 0.1])
+        #jpGen.run([0.4, 0.1, 0.3, 0.1, 0.1])
+        jpGen.run([0.4, 0.3, 0.1, 0.1, 0.1])
         return jpGen.getGeneratedDirs()
     except:
         print("Unexpected error:", sys.exc_info()[0])

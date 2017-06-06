@@ -1,395 +1,1072 @@
 Created by PLY version 3.10 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    TIMES
+    SPACE
+    WHILE
+    STARTP
+    PLUS
+    LOGIC_NOT
+    DIVIDE
+    FOR
+    MINUS
+    DO
+    FINISHP
+
 Grammar
 
-Rule 0     S' -> statement
-Rule 1     statement -> NAME = expression
-Rule 2     statement -> expression
-Rule 3     expression -> expression + expression
-Rule 4     expression -> expression - expression
-Rule 5     expression -> expression * expression
-Rule 6     expression -> expression / expression
-Rule 7     expression -> - expression
-Rule 8     expression -> ( expression )
-Rule 9     expression -> NUMBER
-Rule 10    expression -> NAME
+Rule 0     S' -> programm_struct
+Rule 1     programm_struct -> COMMENT programm_body
+Rule 2     programm_struct -> programm_body
+Rule 3     iot_device -> IDENT
+Rule 4     iot_dev_control -> IDENT
+Rule 5     iot_command -> TURN
+Rule 6     iot_command -> SWITCH_STATE_TO
+Rule 7     iot_command -> DIMMER
+Rule 8     toggle_cmd_args -> CMDARG_ON
+Rule 9     toggle_cmd_args -> CMDARG_OFF
+Rule 10    iot_cmd_argument -> toggle_cmd_args
+Rule 11    iot_cmd_argument -> NUMBER
+Rule 12    iot_cmd_argument -> RANGE DOT LSQB NUMBER COMMA NUMBER RSQB
+Rule 13    iot_object_expr -> iot_device OCTOTHORPE iot_dev_control
+Rule 14    get_device_info -> STATE
+Rule 15    iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info
+Rule 16    iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+Rule 17    assigment -> iot_object_expr ASSIGN NUMBER
+Rule 18    assigment -> iot_object_expr ASSIGN toggle_cmd_args
+Rule 19    assigment_stmts -> assigment_stmts assigment SEMICOLON
+Rule 20    assigment_stmts -> assigment SEMICOLON
+Rule 21    logical_comp -> EGREATER
+Rule 22    logical_comp -> GREATER
+Rule 23    logical_comp -> ELESS
+Rule 24    logical_comp -> LESS
+Rule 25    logical_comp -> EQUAL
+Rule 26    logical_comp -> NOTEQUAL
+Rule 27    logical_operator -> LOGIC_AND
+Rule 28    logical_operator -> LOGIC_OR
+Rule 29    logical_cond -> logical_comp
+Rule 30    logical_cond -> logical_operator
+Rule 31    condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN
+Rule 32    condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN
+Rule 33    condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN
+Rule 34    condition_list -> condition_list logical_operator condition
+Rule 35    condition_list -> condition
+Rule 36    condition_list -> LPAREN condition_list RPAREN
+Rule 37    if_stmt -> IF LBRACE condition_list RBRACE THEN
+Rule 38    end_if -> END
+Rule 39    condition_instr -> if_stmt BEGIN assigment_stmts end_if SEMICOLON
+Rule 40    condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON
+Rule 41    programm_body -> programm_body condition_instr
+Rule 42    programm_body -> condition_instr
+Rule 43    programm_body -> programm_body assigment_stmts
+Rule 44    programm_body -> assigment_stmts
 
 Terminals, with rules where they appear
 
-(                    : 8
-)                    : 8
-*                    : 5
-+                    : 3
--                    : 4 7
-/                    : 6
-=                    : 1
-NAME                 : 1 10
-NUMBER               : 9
+ASSIGN               : 17 18
+BEGIN                : 39 40 40
+CMDARG_OFF           : 9
+CMDARG_ON            : 8
+COMMA                : 12 16
+COMMENT              : 1
+DIMMER               : 7
+DIVIDE               : 
+DO                   : 
+DOT                  : 12 16 16 16 16
+EGREATER             : 21
+ELESS                : 23
+ELSE                 : 40
+END                  : 38
+EQUAL                : 25
+FINISHP              : 
+FOR                  : 
+GREATER              : 22
+IDENT                : 3 4
+IF                   : 37
+LBRACE               : 37
+LESS                 : 24
+LOGIC_AND            : 27
+LOGIC_NOT            : 
+LOGIC_OR             : 28
+LPAREN               : 31 32 33 36
+LSQB                 : 12 16 16
+MINUS                : 
+NOTEQUAL             : 26
+NUMBER               : 11 12 12 16 16 17 32
+OCTOTHORPE           : 13 15 15
+PLUS                 : 
+RANGE                : 12 16
+RBRACE               : 37
+RPAREN               : 31 32 33 36
+RSQB                 : 12 16 16
+SEMICOLON            : 19 20 39 40
+SPACE                : 
+STARTP               : 
+STATE                : 14
+SWITCH_STATE_TO      : 6
+THEN                 : 37
+TIMES                : 
+TURN                 : 5
+WHILE                : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 1 2 3 3 4 4 5 5 6 6 7 8
-statement            : 0
+assigment            : 19 20
+assigment_stmts      : 19 39 40 40 43 44
+condition            : 34 35
+condition_instr      : 41 42
+condition_list       : 34 36 37
+end_if               : 39 40 40
+get_device_info      : 15
+if_stmt              : 39 40
+iot_cmd_argument     : 
+iot_command          : 16
+iot_dev_control      : 13 15 16
+iot_device           : 13 15 16
+iot_device_get_info  : 31 31 32 33
+iot_object_expr      : 17 18
+logical_comp         : 29 31 32 33
+logical_cond         : 
+logical_operator     : 30 34
+programm_body        : 1 2 41 43
+programm_struct      : 0
+toggle_cmd_args      : 10 18 33
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . statement
-    (1) statement -> . NAME = expression
-    (2) statement -> . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (0) S' -> . programm_struct
+    (1) programm_struct -> . COMMENT programm_body
+    (2) programm_struct -> . programm_body
+    (41) programm_body -> . programm_body condition_instr
+    (42) programm_body -> . condition_instr
+    (43) programm_body -> . programm_body assigment_stmts
+    (44) programm_body -> . assigment_stmts
+    (39) condition_instr -> . if_stmt BEGIN assigment_stmts end_if SEMICOLON
+    (40) condition_instr -> . if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON
+    (19) assigment_stmts -> . assigment_stmts assigment SEMICOLON
+    (20) assigment_stmts -> . assigment SEMICOLON
+    (37) if_stmt -> . IF LBRACE condition_list RBRACE THEN
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
 
-    NAME            shift and go to state 6
-    -               shift and go to state 5
-    (               shift and go to state 3
-    NUMBER          shift and go to state 1
+    COMMENT         shift and go to state 10
+    IF              shift and go to state 9
+    IDENT           shift and go to state 3
 
-    statement                      shift and go to state 4
-    expression                     shift and go to state 2
+    if_stmt                        shift and go to state 1
+    programm_body                  shift and go to state 2
+    assigment                      shift and go to state 8
+    programm_struct                shift and go to state 11
+    assigment_stmts                shift and go to state 4
+    condition_instr                shift and go to state 5
+    iot_device                     shift and go to state 6
+    iot_object_expr                shift and go to state 7
 
 state 1
 
-    (9) expression -> NUMBER .
+    (39) condition_instr -> if_stmt . BEGIN assigment_stmts end_if SEMICOLON
+    (40) condition_instr -> if_stmt . BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON
 
-    +               reduce using rule 9 (expression -> NUMBER .)
-    -               reduce using rule 9 (expression -> NUMBER .)
-    *               reduce using rule 9 (expression -> NUMBER .)
-    /               reduce using rule 9 (expression -> NUMBER .)
-    $end            reduce using rule 9 (expression -> NUMBER .)
-    )               reduce using rule 9 (expression -> NUMBER .)
+    BEGIN           shift and go to state 12
 
 
 state 2
 
-    (2) statement -> expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (2) programm_struct -> programm_body .
+    (41) programm_body -> programm_body . condition_instr
+    (43) programm_body -> programm_body . assigment_stmts
+    (39) condition_instr -> . if_stmt BEGIN assigment_stmts end_if SEMICOLON
+    (40) condition_instr -> . if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON
+    (19) assigment_stmts -> . assigment_stmts assigment SEMICOLON
+    (20) assigment_stmts -> . assigment SEMICOLON
+    (37) if_stmt -> . IF LBRACE condition_list RBRACE THEN
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
 
-    $end            reduce using rule 2 (statement -> expression .)
-    +               shift and go to state 9
-    -               shift and go to state 8
-    *               shift and go to state 10
-    /               shift and go to state 7
+    $end            reduce using rule 2 (programm_struct -> programm_body .)
+    IF              shift and go to state 9
+    IDENT           shift and go to state 3
 
+    if_stmt                        shift and go to state 1
+    assigment                      shift and go to state 8
+    iot_device                     shift and go to state 6
+    assigment_stmts                shift and go to state 13
+    condition_instr                shift and go to state 14
+    iot_object_expr                shift and go to state 7
 
 state 3
 
-    (8) expression -> ( . expression )
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (3) iot_device -> IDENT .
 
-    -               shift and go to state 5
-    (               shift and go to state 3
-    NUMBER          shift and go to state 1
-    NAME            shift and go to state 12
+    OCTOTHORPE      reduce using rule 3 (iot_device -> IDENT .)
+    DOT             reduce using rule 3 (iot_device -> IDENT .)
 
-    expression                     shift and go to state 11
 
 state 4
 
-    (0) S' -> statement .
+    (44) programm_body -> assigment_stmts .
+    (19) assigment_stmts -> assigment_stmts . assigment SEMICOLON
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
 
+  ! shift/reduce conflict for IDENT resolved as shift
+    IF              reduce using rule 44 (programm_body -> assigment_stmts .)
+    $end            reduce using rule 44 (programm_body -> assigment_stmts .)
+    IDENT           shift and go to state 3
 
+  ! IDENT           [ reduce using rule 44 (programm_body -> assigment_stmts .) ]
+
+    assigment                      shift and go to state 15
+    iot_device                     shift and go to state 6
+    iot_object_expr                shift and go to state 7
 
 state 5
 
-    (7) expression -> - . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (42) programm_body -> condition_instr .
 
-    -               shift and go to state 5
-    (               shift and go to state 3
-    NUMBER          shift and go to state 1
-    NAME            shift and go to state 12
+    IF              reduce using rule 42 (programm_body -> condition_instr .)
+    IDENT           reduce using rule 42 (programm_body -> condition_instr .)
+    $end            reduce using rule 42 (programm_body -> condition_instr .)
 
-    expression                     shift and go to state 13
 
 state 6
 
-    (1) statement -> NAME . = expression
-    (10) expression -> NAME .
+    (13) iot_object_expr -> iot_device . OCTOTHORPE iot_dev_control
 
-    =               shift and go to state 14
-    +               reduce using rule 10 (expression -> NAME .)
-    -               reduce using rule 10 (expression -> NAME .)
-    *               reduce using rule 10 (expression -> NAME .)
-    /               reduce using rule 10 (expression -> NAME .)
-    $end            reduce using rule 10 (expression -> NAME .)
+    OCTOTHORPE      shift and go to state 16
 
 
 state 7
 
-    (6) expression -> expression / . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (17) assigment -> iot_object_expr . ASSIGN NUMBER
+    (18) assigment -> iot_object_expr . ASSIGN toggle_cmd_args
 
-    -               shift and go to state 5
-    (               shift and go to state 3
-    NUMBER          shift and go to state 1
-    NAME            shift and go to state 12
+    ASSIGN          shift and go to state 17
 
-    expression                     shift and go to state 15
 
 state 8
 
-    (4) expression -> expression - . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (20) assigment_stmts -> assigment . SEMICOLON
 
-    -               shift and go to state 5
-    (               shift and go to state 3
-    NUMBER          shift and go to state 1
-    NAME            shift and go to state 12
+    SEMICOLON       shift and go to state 18
 
-    expression                     shift and go to state 16
 
 state 9
 
-    (3) expression -> expression + . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (37) if_stmt -> IF . LBRACE condition_list RBRACE THEN
 
-    -               shift and go to state 5
-    (               shift and go to state 3
-    NUMBER          shift and go to state 1
-    NAME            shift and go to state 12
+    LBRACE          shift and go to state 19
 
-    expression                     shift and go to state 17
 
 state 10
 
-    (5) expression -> expression * . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (1) programm_struct -> COMMENT . programm_body
+    (41) programm_body -> . programm_body condition_instr
+    (42) programm_body -> . condition_instr
+    (43) programm_body -> . programm_body assigment_stmts
+    (44) programm_body -> . assigment_stmts
+    (39) condition_instr -> . if_stmt BEGIN assigment_stmts end_if SEMICOLON
+    (40) condition_instr -> . if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON
+    (19) assigment_stmts -> . assigment_stmts assigment SEMICOLON
+    (20) assigment_stmts -> . assigment SEMICOLON
+    (37) if_stmt -> . IF LBRACE condition_list RBRACE THEN
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
 
-    -               shift and go to state 5
-    (               shift and go to state 3
-    NUMBER          shift and go to state 1
-    NAME            shift and go to state 12
+    IF              shift and go to state 9
+    IDENT           shift and go to state 3
 
-    expression                     shift and go to state 18
+    if_stmt                        shift and go to state 1
+    programm_body                  shift and go to state 20
+    assigment                      shift and go to state 8
+    iot_device                     shift and go to state 6
+    assigment_stmts                shift and go to state 4
+    condition_instr                shift and go to state 5
+    iot_object_expr                shift and go to state 7
 
 state 11
 
-    (8) expression -> ( expression . )
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (0) S' -> programm_struct .
 
-    )               shift and go to state 19
-    +               shift and go to state 9
-    -               shift and go to state 8
-    *               shift and go to state 10
-    /               shift and go to state 7
 
 
 state 12
 
-    (10) expression -> NAME .
+    (39) condition_instr -> if_stmt BEGIN . assigment_stmts end_if SEMICOLON
+    (40) condition_instr -> if_stmt BEGIN . assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON
+    (19) assigment_stmts -> . assigment_stmts assigment SEMICOLON
+    (20) assigment_stmts -> . assigment SEMICOLON
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
 
-    +               reduce using rule 10 (expression -> NAME .)
-    -               reduce using rule 10 (expression -> NAME .)
-    *               reduce using rule 10 (expression -> NAME .)
-    /               reduce using rule 10 (expression -> NAME .)
-    $end            reduce using rule 10 (expression -> NAME .)
-    )               reduce using rule 10 (expression -> NAME .)
+    IDENT           shift and go to state 3
 
+    assigment                      shift and go to state 8
+    assigment_stmts                shift and go to state 21
+    iot_device                     shift and go to state 6
+    iot_object_expr                shift and go to state 7
 
 state 13
 
-    (7) expression -> - expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (43) programm_body -> programm_body assigment_stmts .
+    (19) assigment_stmts -> assigment_stmts . assigment SEMICOLON
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
 
-    +               reduce using rule 7 (expression -> - expression .)
-    -               reduce using rule 7 (expression -> - expression .)
-    *               reduce using rule 7 (expression -> - expression .)
-    /               reduce using rule 7 (expression -> - expression .)
-    $end            reduce using rule 7 (expression -> - expression .)
-    )               reduce using rule 7 (expression -> - expression .)
+  ! shift/reduce conflict for IDENT resolved as shift
+    IF              reduce using rule 43 (programm_body -> programm_body assigment_stmts .)
+    $end            reduce using rule 43 (programm_body -> programm_body assigment_stmts .)
+    IDENT           shift and go to state 3
 
-  ! +               [ shift and go to state 9 ]
-  ! -               [ shift and go to state 8 ]
-  ! *               [ shift and go to state 10 ]
-  ! /               [ shift and go to state 7 ]
+  ! IDENT           [ reduce using rule 43 (programm_body -> programm_body assigment_stmts .) ]
 
+    assigment                      shift and go to state 15
+    iot_device                     shift and go to state 6
+    iot_object_expr                shift and go to state 7
 
 state 14
 
-    (1) statement -> NAME = . expression
-    (3) expression -> . expression + expression
-    (4) expression -> . expression - expression
-    (5) expression -> . expression * expression
-    (6) expression -> . expression / expression
-    (7) expression -> . - expression
-    (8) expression -> . ( expression )
-    (9) expression -> . NUMBER
-    (10) expression -> . NAME
+    (41) programm_body -> programm_body condition_instr .
 
-    -               shift and go to state 5
-    (               shift and go to state 3
-    NUMBER          shift and go to state 1
-    NAME            shift and go to state 12
+    IF              reduce using rule 41 (programm_body -> programm_body condition_instr .)
+    IDENT           reduce using rule 41 (programm_body -> programm_body condition_instr .)
+    $end            reduce using rule 41 (programm_body -> programm_body condition_instr .)
 
-    expression                     shift and go to state 20
 
 state 15
 
-    (6) expression -> expression / expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (19) assigment_stmts -> assigment_stmts assigment . SEMICOLON
 
-    +               reduce using rule 6 (expression -> expression / expression .)
-    -               reduce using rule 6 (expression -> expression / expression .)
-    *               reduce using rule 6 (expression -> expression / expression .)
-    /               reduce using rule 6 (expression -> expression / expression .)
-    $end            reduce using rule 6 (expression -> expression / expression .)
-    )               reduce using rule 6 (expression -> expression / expression .)
-
-  ! +               [ shift and go to state 9 ]
-  ! -               [ shift and go to state 8 ]
-  ! *               [ shift and go to state 10 ]
-  ! /               [ shift and go to state 7 ]
+    SEMICOLON       shift and go to state 22
 
 
 state 16
 
-    (4) expression -> expression - expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (13) iot_object_expr -> iot_device OCTOTHORPE . iot_dev_control
+    (4) iot_dev_control -> . IDENT
 
-    +               reduce using rule 4 (expression -> expression - expression .)
-    -               reduce using rule 4 (expression -> expression - expression .)
-    $end            reduce using rule 4 (expression -> expression - expression .)
-    )               reduce using rule 4 (expression -> expression - expression .)
-    *               shift and go to state 10
-    /               shift and go to state 7
+    IDENT           shift and go to state 23
 
-  ! *               [ reduce using rule 4 (expression -> expression - expression .) ]
-  ! /               [ reduce using rule 4 (expression -> expression - expression .) ]
-  ! +               [ shift and go to state 9 ]
-  ! -               [ shift and go to state 8 ]
-
+    iot_dev_control                shift and go to state 24
 
 state 17
 
-    (3) expression -> expression + expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (17) assigment -> iot_object_expr ASSIGN . NUMBER
+    (18) assigment -> iot_object_expr ASSIGN . toggle_cmd_args
+    (8) toggle_cmd_args -> . CMDARG_ON
+    (9) toggle_cmd_args -> . CMDARG_OFF
 
-    +               reduce using rule 3 (expression -> expression + expression .)
-    -               reduce using rule 3 (expression -> expression + expression .)
-    $end            reduce using rule 3 (expression -> expression + expression .)
-    )               reduce using rule 3 (expression -> expression + expression .)
-    *               shift and go to state 10
-    /               shift and go to state 7
+    NUMBER          shift and go to state 25
+    CMDARG_ON       shift and go to state 28
+    CMDARG_OFF      shift and go to state 27
 
-  ! *               [ reduce using rule 3 (expression -> expression + expression .) ]
-  ! /               [ reduce using rule 3 (expression -> expression + expression .) ]
-  ! +               [ shift and go to state 9 ]
-  ! -               [ shift and go to state 8 ]
-
+    toggle_cmd_args                shift and go to state 26
 
 state 18
 
-    (5) expression -> expression * expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (20) assigment_stmts -> assigment SEMICOLON .
 
-    +               reduce using rule 5 (expression -> expression * expression .)
-    -               reduce using rule 5 (expression -> expression * expression .)
-    *               reduce using rule 5 (expression -> expression * expression .)
-    /               reduce using rule 5 (expression -> expression * expression .)
-    $end            reduce using rule 5 (expression -> expression * expression .)
-    )               reduce using rule 5 (expression -> expression * expression .)
-
-  ! +               [ shift and go to state 9 ]
-  ! -               [ shift and go to state 8 ]
-  ! *               [ shift and go to state 10 ]
-  ! /               [ shift and go to state 7 ]
+    IDENT           reduce using rule 20 (assigment_stmts -> assigment SEMICOLON .)
+    IF              reduce using rule 20 (assigment_stmts -> assigment SEMICOLON .)
+    $end            reduce using rule 20 (assigment_stmts -> assigment SEMICOLON .)
+    END             reduce using rule 20 (assigment_stmts -> assigment SEMICOLON .)
 
 
 state 19
 
-    (8) expression -> ( expression ) .
+    (37) if_stmt -> IF LBRACE . condition_list RBRACE THEN
+    (34) condition_list -> . condition_list logical_operator condition
+    (35) condition_list -> . condition
+    (36) condition_list -> . LPAREN condition_list RPAREN
+    (31) condition -> . LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN
+    (32) condition -> . LPAREN iot_device_get_info logical_comp NUMBER RPAREN
+    (33) condition -> . LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN
 
-    +               reduce using rule 8 (expression -> ( expression ) .)
-    -               reduce using rule 8 (expression -> ( expression ) .)
-    *               reduce using rule 8 (expression -> ( expression ) .)
-    /               reduce using rule 8 (expression -> ( expression ) .)
-    $end            reduce using rule 8 (expression -> ( expression ) .)
-    )               reduce using rule 8 (expression -> ( expression ) .)
+    LPAREN          shift and go to state 30
 
+    condition_list                 shift and go to state 29
+    condition                      shift and go to state 31
 
 state 20
 
-    (1) statement -> NAME = expression .
-    (3) expression -> expression . + expression
-    (4) expression -> expression . - expression
-    (5) expression -> expression . * expression
-    (6) expression -> expression . / expression
+    (1) programm_struct -> COMMENT programm_body .
+    (41) programm_body -> programm_body . condition_instr
+    (43) programm_body -> programm_body . assigment_stmts
+    (39) condition_instr -> . if_stmt BEGIN assigment_stmts end_if SEMICOLON
+    (40) condition_instr -> . if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON
+    (19) assigment_stmts -> . assigment_stmts assigment SEMICOLON
+    (20) assigment_stmts -> . assigment SEMICOLON
+    (37) if_stmt -> . IF LBRACE condition_list RBRACE THEN
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
 
-    $end            reduce using rule 1 (statement -> NAME = expression .)
-    +               shift and go to state 9
-    -               shift and go to state 8
-    *               shift and go to state 10
-    /               shift and go to state 7
+    $end            reduce using rule 1 (programm_struct -> COMMENT programm_body .)
+    IF              shift and go to state 9
+    IDENT           shift and go to state 3
 
+    if_stmt                        shift and go to state 1
+    assigment                      shift and go to state 8
+    iot_device                     shift and go to state 6
+    assigment_stmts                shift and go to state 13
+    condition_instr                shift and go to state 14
+    iot_object_expr                shift and go to state 7
+
+state 21
+
+    (39) condition_instr -> if_stmt BEGIN assigment_stmts . end_if SEMICOLON
+    (40) condition_instr -> if_stmt BEGIN assigment_stmts . end_if ELSE BEGIN assigment_stmts end_if SEMICOLON
+    (19) assigment_stmts -> assigment_stmts . assigment SEMICOLON
+    (38) end_if -> . END
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
+
+    END             shift and go to state 33
+    IDENT           shift and go to state 3
+
+    assigment                      shift and go to state 15
+    end_if                         shift and go to state 32
+    iot_device                     shift and go to state 6
+    iot_object_expr                shift and go to state 7
+
+state 22
+
+    (19) assigment_stmts -> assigment_stmts assigment SEMICOLON .
+
+    IDENT           reduce using rule 19 (assigment_stmts -> assigment_stmts assigment SEMICOLON .)
+    IF              reduce using rule 19 (assigment_stmts -> assigment_stmts assigment SEMICOLON .)
+    $end            reduce using rule 19 (assigment_stmts -> assigment_stmts assigment SEMICOLON .)
+    END             reduce using rule 19 (assigment_stmts -> assigment_stmts assigment SEMICOLON .)
+
+
+state 23
+
+    (4) iot_dev_control -> IDENT .
+
+    OCTOTHORPE      reduce using rule 4 (iot_dev_control -> IDENT .)
+    DOT             reduce using rule 4 (iot_dev_control -> IDENT .)
+    ASSIGN          reduce using rule 4 (iot_dev_control -> IDENT .)
+
+
+state 24
+
+    (13) iot_object_expr -> iot_device OCTOTHORPE iot_dev_control .
+
+    ASSIGN          reduce using rule 13 (iot_object_expr -> iot_device OCTOTHORPE iot_dev_control .)
+
+
+state 25
+
+    (17) assigment -> iot_object_expr ASSIGN NUMBER .
+
+    SEMICOLON       reduce using rule 17 (assigment -> iot_object_expr ASSIGN NUMBER .)
+
+
+state 26
+
+    (18) assigment -> iot_object_expr ASSIGN toggle_cmd_args .
+
+    SEMICOLON       reduce using rule 18 (assigment -> iot_object_expr ASSIGN toggle_cmd_args .)
+
+
+state 27
+
+    (9) toggle_cmd_args -> CMDARG_OFF .
+
+    RPAREN          reduce using rule 9 (toggle_cmd_args -> CMDARG_OFF .)
+    SEMICOLON       reduce using rule 9 (toggle_cmd_args -> CMDARG_OFF .)
+
+
+state 28
+
+    (8) toggle_cmd_args -> CMDARG_ON .
+
+    RPAREN          reduce using rule 8 (toggle_cmd_args -> CMDARG_ON .)
+    SEMICOLON       reduce using rule 8 (toggle_cmd_args -> CMDARG_ON .)
+
+
+state 29
+
+    (37) if_stmt -> IF LBRACE condition_list . RBRACE THEN
+    (34) condition_list -> condition_list . logical_operator condition
+    (27) logical_operator -> . LOGIC_AND
+    (28) logical_operator -> . LOGIC_OR
+
+    RBRACE          shift and go to state 37
+    LOGIC_AND       shift and go to state 34
+    LOGIC_OR        shift and go to state 36
+
+    logical_operator               shift and go to state 35
+
+state 30
+
+    (36) condition_list -> LPAREN . condition_list RPAREN
+    (31) condition -> LPAREN . iot_device_get_info logical_comp iot_device_get_info RPAREN
+    (32) condition -> LPAREN . iot_device_get_info logical_comp NUMBER RPAREN
+    (33) condition -> LPAREN . iot_device_get_info logical_comp toggle_cmd_args RPAREN
+    (34) condition_list -> . condition_list logical_operator condition
+    (35) condition_list -> . condition
+    (36) condition_list -> . LPAREN condition_list RPAREN
+    (15) iot_device_get_info -> . iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info
+    (16) iot_device_get_info -> . iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+    (31) condition -> . LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN
+    (32) condition -> . LPAREN iot_device_get_info logical_comp NUMBER RPAREN
+    (33) condition -> . LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN
+    (3) iot_device -> . IDENT
+
+    LPAREN          shift and go to state 30
+    IDENT           shift and go to state 3
+
+    iot_device                     shift and go to state 40
+    iot_device_get_info            shift and go to state 39
+    condition_list                 shift and go to state 38
+    condition                      shift and go to state 31
+
+state 31
+
+    (35) condition_list -> condition .
+
+    RPAREN          reduce using rule 35 (condition_list -> condition .)
+    LOGIC_AND       reduce using rule 35 (condition_list -> condition .)
+    LOGIC_OR        reduce using rule 35 (condition_list -> condition .)
+    RBRACE          reduce using rule 35 (condition_list -> condition .)
+
+
+state 32
+
+    (39) condition_instr -> if_stmt BEGIN assigment_stmts end_if . SEMICOLON
+    (40) condition_instr -> if_stmt BEGIN assigment_stmts end_if . ELSE BEGIN assigment_stmts end_if SEMICOLON
+
+    SEMICOLON       shift and go to state 41
+    ELSE            shift and go to state 42
+
+
+state 33
+
+    (38) end_if -> END .
+
+    SEMICOLON       reduce using rule 38 (end_if -> END .)
+    ELSE            reduce using rule 38 (end_if -> END .)
+
+
+state 34
+
+    (27) logical_operator -> LOGIC_AND .
+
+    LPAREN          reduce using rule 27 (logical_operator -> LOGIC_AND .)
+
+
+state 35
+
+    (34) condition_list -> condition_list logical_operator . condition
+    (31) condition -> . LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN
+    (32) condition -> . LPAREN iot_device_get_info logical_comp NUMBER RPAREN
+    (33) condition -> . LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN
+
+    LPAREN          shift and go to state 44
+
+    condition                      shift and go to state 43
+
+state 36
+
+    (28) logical_operator -> LOGIC_OR .
+
+    LPAREN          reduce using rule 28 (logical_operator -> LOGIC_OR .)
+
+
+state 37
+
+    (37) if_stmt -> IF LBRACE condition_list RBRACE . THEN
+
+    THEN            shift and go to state 45
+
+
+state 38
+
+    (36) condition_list -> LPAREN condition_list . RPAREN
+    (34) condition_list -> condition_list . logical_operator condition
+    (27) logical_operator -> . LOGIC_AND
+    (28) logical_operator -> . LOGIC_OR
+
+    RPAREN          shift and go to state 46
+    LOGIC_AND       shift and go to state 34
+    LOGIC_OR        shift and go to state 36
+
+    logical_operator               shift and go to state 35
+
+state 39
+
+    (31) condition -> LPAREN iot_device_get_info . logical_comp iot_device_get_info RPAREN
+    (32) condition -> LPAREN iot_device_get_info . logical_comp NUMBER RPAREN
+    (33) condition -> LPAREN iot_device_get_info . logical_comp toggle_cmd_args RPAREN
+    (21) logical_comp -> . EGREATER
+    (22) logical_comp -> . GREATER
+    (23) logical_comp -> . ELESS
+    (24) logical_comp -> . LESS
+    (25) logical_comp -> . EQUAL
+    (26) logical_comp -> . NOTEQUAL
+
+    EGREATER        shift and go to state 48
+    GREATER         shift and go to state 49
+    ELESS           shift and go to state 51
+    LESS            shift and go to state 53
+    EQUAL           shift and go to state 52
+    NOTEQUAL        shift and go to state 50
+
+    logical_comp                   shift and go to state 47
+
+state 40
+
+    (15) iot_device_get_info -> iot_device . OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info
+    (16) iot_device_get_info -> iot_device . DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+
+    OCTOTHORPE      shift and go to state 54
+    DOT             shift and go to state 55
+
+
+state 41
+
+    (39) condition_instr -> if_stmt BEGIN assigment_stmts end_if SEMICOLON .
+
+    IF              reduce using rule 39 (condition_instr -> if_stmt BEGIN assigment_stmts end_if SEMICOLON .)
+    IDENT           reduce using rule 39 (condition_instr -> if_stmt BEGIN assigment_stmts end_if SEMICOLON .)
+    $end            reduce using rule 39 (condition_instr -> if_stmt BEGIN assigment_stmts end_if SEMICOLON .)
+
+
+state 42
+
+    (40) condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE . BEGIN assigment_stmts end_if SEMICOLON
+
+    BEGIN           shift and go to state 56
+
+
+state 43
+
+    (34) condition_list -> condition_list logical_operator condition .
+
+    RPAREN          reduce using rule 34 (condition_list -> condition_list logical_operator condition .)
+    LOGIC_AND       reduce using rule 34 (condition_list -> condition_list logical_operator condition .)
+    LOGIC_OR        reduce using rule 34 (condition_list -> condition_list logical_operator condition .)
+    RBRACE          reduce using rule 34 (condition_list -> condition_list logical_operator condition .)
+
+
+state 44
+
+    (31) condition -> LPAREN . iot_device_get_info logical_comp iot_device_get_info RPAREN
+    (32) condition -> LPAREN . iot_device_get_info logical_comp NUMBER RPAREN
+    (33) condition -> LPAREN . iot_device_get_info logical_comp toggle_cmd_args RPAREN
+    (15) iot_device_get_info -> . iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info
+    (16) iot_device_get_info -> . iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+    (3) iot_device -> . IDENT
+
+    IDENT           shift and go to state 3
+
+    iot_device_get_info            shift and go to state 39
+    iot_device                     shift and go to state 40
+
+state 45
+
+    (37) if_stmt -> IF LBRACE condition_list RBRACE THEN .
+
+    BEGIN           reduce using rule 37 (if_stmt -> IF LBRACE condition_list RBRACE THEN .)
+
+
+state 46
+
+    (36) condition_list -> LPAREN condition_list RPAREN .
+
+    RPAREN          reduce using rule 36 (condition_list -> LPAREN condition_list RPAREN .)
+    LOGIC_AND       reduce using rule 36 (condition_list -> LPAREN condition_list RPAREN .)
+    LOGIC_OR        reduce using rule 36 (condition_list -> LPAREN condition_list RPAREN .)
+    RBRACE          reduce using rule 36 (condition_list -> LPAREN condition_list RPAREN .)
+
+
+state 47
+
+    (31) condition -> LPAREN iot_device_get_info logical_comp . iot_device_get_info RPAREN
+    (32) condition -> LPAREN iot_device_get_info logical_comp . NUMBER RPAREN
+    (33) condition -> LPAREN iot_device_get_info logical_comp . toggle_cmd_args RPAREN
+    (15) iot_device_get_info -> . iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info
+    (16) iot_device_get_info -> . iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+    (8) toggle_cmd_args -> . CMDARG_ON
+    (9) toggle_cmd_args -> . CMDARG_OFF
+    (3) iot_device -> . IDENT
+
+    NUMBER          shift and go to state 58
+    CMDARG_ON       shift and go to state 28
+    CMDARG_OFF      shift and go to state 27
+    IDENT           shift and go to state 3
+
+    toggle_cmd_args                shift and go to state 57
+    iot_device_get_info            shift and go to state 59
+    iot_device                     shift and go to state 40
+
+state 48
+
+    (21) logical_comp -> EGREATER .
+
+    NUMBER          reduce using rule 21 (logical_comp -> EGREATER .)
+    CMDARG_ON       reduce using rule 21 (logical_comp -> EGREATER .)
+    CMDARG_OFF      reduce using rule 21 (logical_comp -> EGREATER .)
+    IDENT           reduce using rule 21 (logical_comp -> EGREATER .)
+
+
+state 49
+
+    (22) logical_comp -> GREATER .
+
+    NUMBER          reduce using rule 22 (logical_comp -> GREATER .)
+    CMDARG_ON       reduce using rule 22 (logical_comp -> GREATER .)
+    CMDARG_OFF      reduce using rule 22 (logical_comp -> GREATER .)
+    IDENT           reduce using rule 22 (logical_comp -> GREATER .)
+
+
+state 50
+
+    (26) logical_comp -> NOTEQUAL .
+
+    NUMBER          reduce using rule 26 (logical_comp -> NOTEQUAL .)
+    CMDARG_ON       reduce using rule 26 (logical_comp -> NOTEQUAL .)
+    CMDARG_OFF      reduce using rule 26 (logical_comp -> NOTEQUAL .)
+    IDENT           reduce using rule 26 (logical_comp -> NOTEQUAL .)
+
+
+state 51
+
+    (23) logical_comp -> ELESS .
+
+    NUMBER          reduce using rule 23 (logical_comp -> ELESS .)
+    CMDARG_ON       reduce using rule 23 (logical_comp -> ELESS .)
+    CMDARG_OFF      reduce using rule 23 (logical_comp -> ELESS .)
+    IDENT           reduce using rule 23 (logical_comp -> ELESS .)
+
+
+state 52
+
+    (25) logical_comp -> EQUAL .
+
+    NUMBER          reduce using rule 25 (logical_comp -> EQUAL .)
+    CMDARG_ON       reduce using rule 25 (logical_comp -> EQUAL .)
+    CMDARG_OFF      reduce using rule 25 (logical_comp -> EQUAL .)
+    IDENT           reduce using rule 25 (logical_comp -> EQUAL .)
+
+
+state 53
+
+    (24) logical_comp -> LESS .
+
+    NUMBER          reduce using rule 24 (logical_comp -> LESS .)
+    CMDARG_ON       reduce using rule 24 (logical_comp -> LESS .)
+    CMDARG_OFF      reduce using rule 24 (logical_comp -> LESS .)
+    IDENT           reduce using rule 24 (logical_comp -> LESS .)
+
+
+state 54
+
+    (15) iot_device_get_info -> iot_device OCTOTHORPE . iot_dev_control OCTOTHORPE get_device_info
+    (4) iot_dev_control -> . IDENT
+
+    IDENT           shift and go to state 23
+
+    iot_dev_control                shift and go to state 60
+
+state 55
+
+    (16) iot_device_get_info -> iot_device DOT . iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+    (4) iot_dev_control -> . IDENT
+
+    IDENT           shift and go to state 23
+
+    iot_dev_control                shift and go to state 61
+
+state 56
+
+    (40) condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE BEGIN . assigment_stmts end_if SEMICOLON
+    (19) assigment_stmts -> . assigment_stmts assigment SEMICOLON
+    (20) assigment_stmts -> . assigment SEMICOLON
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
+
+    IDENT           shift and go to state 3
+
+    assigment                      shift and go to state 8
+    assigment_stmts                shift and go to state 62
+    iot_device                     shift and go to state 6
+    iot_object_expr                shift and go to state 7
+
+state 57
+
+    (33) condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args . RPAREN
+
+    RPAREN          shift and go to state 63
+
+
+state 58
+
+    (32) condition -> LPAREN iot_device_get_info logical_comp NUMBER . RPAREN
+
+    RPAREN          shift and go to state 64
+
+
+state 59
+
+    (31) condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info . RPAREN
+
+    RPAREN          shift and go to state 65
+
+
+state 60
+
+    (15) iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control . OCTOTHORPE get_device_info
+
+    OCTOTHORPE      shift and go to state 66
+
+
+state 61
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control . DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+
+    DOT             shift and go to state 67
+
+
+state 62
+
+    (40) condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts . end_if SEMICOLON
+    (19) assigment_stmts -> assigment_stmts . assigment SEMICOLON
+    (38) end_if -> . END
+    (17) assigment -> . iot_object_expr ASSIGN NUMBER
+    (18) assigment -> . iot_object_expr ASSIGN toggle_cmd_args
+    (13) iot_object_expr -> . iot_device OCTOTHORPE iot_dev_control
+    (3) iot_device -> . IDENT
+
+    END             shift and go to state 33
+    IDENT           shift and go to state 3
+
+    assigment                      shift and go to state 15
+    end_if                         shift and go to state 68
+    iot_device                     shift and go to state 6
+    iot_object_expr                shift and go to state 7
+
+state 63
+
+    (33) condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN .
+
+    RPAREN          reduce using rule 33 (condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN .)
+    LOGIC_AND       reduce using rule 33 (condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN .)
+    LOGIC_OR        reduce using rule 33 (condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN .)
+    RBRACE          reduce using rule 33 (condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN .)
+
+
+state 64
+
+    (32) condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN .
+
+    RPAREN          reduce using rule 32 (condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN .)
+    LOGIC_AND       reduce using rule 32 (condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN .)
+    LOGIC_OR        reduce using rule 32 (condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN .)
+    RBRACE          reduce using rule 32 (condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN .)
+
+
+state 65
+
+    (31) condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN .
+
+    RPAREN          reduce using rule 31 (condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN .)
+    LOGIC_AND       reduce using rule 31 (condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN .)
+    LOGIC_OR        reduce using rule 31 (condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN .)
+    RBRACE          reduce using rule 31 (condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN .)
+
+
+state 66
+
+    (15) iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE . get_device_info
+    (14) get_device_info -> . STATE
+
+    STATE           shift and go to state 69
+
+    get_device_info                shift and go to state 70
+
+state 67
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT . iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+    (5) iot_command -> . TURN
+    (6) iot_command -> . SWITCH_STATE_TO
+    (7) iot_command -> . DIMMER
+
+    TURN            shift and go to state 73
+    SWITCH_STATE_TO shift and go to state 72
+    DIMMER          shift and go to state 71
+
+    iot_command                    shift and go to state 74
+
+state 68
+
+    (40) condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if . SEMICOLON
+
+    SEMICOLON       shift and go to state 75
+
+
+state 69
+
+    (14) get_device_info -> STATE .
+
+    EGREATER        reduce using rule 14 (get_device_info -> STATE .)
+    GREATER         reduce using rule 14 (get_device_info -> STATE .)
+    ELESS           reduce using rule 14 (get_device_info -> STATE .)
+    LESS            reduce using rule 14 (get_device_info -> STATE .)
+    EQUAL           reduce using rule 14 (get_device_info -> STATE .)
+    NOTEQUAL        reduce using rule 14 (get_device_info -> STATE .)
+    RPAREN          reduce using rule 14 (get_device_info -> STATE .)
+
+
+state 70
+
+    (15) iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info .
+
+    EGREATER        reduce using rule 15 (iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info .)
+    GREATER         reduce using rule 15 (iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info .)
+    ELESS           reduce using rule 15 (iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info .)
+    LESS            reduce using rule 15 (iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info .)
+    EQUAL           reduce using rule 15 (iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info .)
+    NOTEQUAL        reduce using rule 15 (iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info .)
+    RPAREN          reduce using rule 15 (iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info .)
+
+
+state 71
+
+    (7) iot_command -> DIMMER .
+
+    DOT             reduce using rule 7 (iot_command -> DIMMER .)
+
+
+state 72
+
+    (6) iot_command -> SWITCH_STATE_TO .
+
+    DOT             reduce using rule 6 (iot_command -> SWITCH_STATE_TO .)
+
+
+state 73
+
+    (5) iot_command -> TURN .
+
+    DOT             reduce using rule 5 (iot_command -> TURN .)
+
+
+state 74
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command . DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+
+    DOT             shift and go to state 76
+
+
+state 75
+
+    (40) condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON .
+
+    IF              reduce using rule 40 (condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON .)
+    IDENT           reduce using rule 40 (condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON .)
+    $end            reduce using rule 40 (condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON .)
+
+
+state 76
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT . LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+
+    LSQB            shift and go to state 77
+
+
+state 77
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB . RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+
+    RANGE           shift and go to state 78
+
+
+state 78
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE . DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
+
+    DOT             shift and go to state 79
+
+
+state 79
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT . LSQB NUMBER COMMA NUMBER RSQB RSQB
+
+    LSQB            shift and go to state 80
+
+
+state 80
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB . NUMBER COMMA NUMBER RSQB RSQB
+
+    NUMBER          shift and go to state 81
+
+
+state 81
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER . COMMA NUMBER RSQB RSQB
+
+    COMMA           shift and go to state 82
+
+
+state 82
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA . NUMBER RSQB RSQB
+
+    NUMBER          shift and go to state 83
+
+
+state 83
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER . RSQB RSQB
+
+    RSQB            shift and go to state 84
+
+
+state 84
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB . RSQB
+
+    RSQB            shift and go to state 85
+
+
+state 85
+
+    (16) iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .
+
+    EGREATER        reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+    GREATER         reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+    ELESS           reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+    LESS            reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+    EQUAL           reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+    NOTEQUAL        reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+    RPAREN          reduce using rule 16 (iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for IDENT in state 4 resolved as shift
+WARNING: shift/reduce conflict for IDENT in state 13 resolved as shift

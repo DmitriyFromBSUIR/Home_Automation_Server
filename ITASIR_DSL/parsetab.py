@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'PLUS MINUS TIMES DIVIDE LPAREN RPAREN SPACE COMMENT STARTP FINISHP ASSIGN LSQB RSQB SEMICOLON ELESS LESS EGREATER GREATER EQUAL NOTEQUAL DOT COMMA LOGIC_AND LOGIC_OR LOGIC_NOT IF THEN ELSE WHILE FOR DO BEGIN END RANGE TURN CMDARG_ON CMDARG_OFF SWITCH_STATE_TO DIMMER IDENT NUMBER GETSTATE GETVALUE LBRACE RBRACE\n        programm_struct : STARTP COMMENT programm_body FINISHP\n                        | STARTP programm_body FINISHP\n    iot_device : IDENTiot_dev_control : IDENT\n        iot_command : TURN\n                    | SWITCH_STATE_TO\n                    | DIMMER\n    \n        toggle_cmd_args : CMDARG_ON\n                        | CMDARG_OFF\n    \n        iot_cmd_argument : toggle_cmd_args\n                         | NUMBER\n                         | RANGE DOT LSQB NUMBER COMMA NUMBER RSQB\n    \n        iot_object_expr : iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB\n    \n        get_device_info : GETSTATE\n                        | GETVALUE\n    \n        iot_device_get_info : iot_device DOT iot_dev_control DOT get_device_info\n                            | iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB\n    \n        assigment : iot_object_expr ASSIGN NUMBER\n                  | iot_object_expr ASSIGN toggle_cmd_args\n    \n        assigment_stmts : assigment_stmts assigment SEMICOLON\n                        | assigment SEMICOLON\n    \n        logical_comp : EGREATER\n                   | GREATER\n                   | ELESS\n                   | LESS\n                   | EQUAL\n                   | NOTEQUAL\n    \n        logical_operator : LOGIC_AND\n                         | LOGIC_OR\n    \n        logical_cond : logical_comp\n                     | logical_operator\n    \n        condition : LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN\n                  | LPAREN iot_device_get_info logical_comp NUMBER RPAREN\n                  | LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN\n    \n        condition_list : condition_list logical_operator condition\n                       | condition\n                       | LPAREN condition_list RPAREN\n    \n        if_stmt : IF LBRACE condition_list RBRACE THEN\n    \n        condition_instr : if_stmt BEGIN assigment_stmts END SEMICOLON\n                        | if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON\n    \n        programm_body : programm_body condition_instr\n                      | condition_instr\n                      | programm_body assigment_stmts\n                      | assigment_stmts\n    '
+_lr_signature = 'PLUS MINUS TIMES DIVIDE LPAREN RPAREN SPACE COMMENT STARTP FINISHP ASSIGN LSQB RSQB SEMICOLON ELESS LESS EGREATER GREATER EQUAL NOTEQUAL DOT COMMA LOGIC_AND LOGIC_OR LOGIC_NOT IF THEN ELSE WHILE FOR DO BEGIN END RANGE TURN CMDARG_ON CMDARG_OFF SWITCH_STATE_TO DIMMER IDENT NUMBER STATE LBRACE RBRACE OCTOTHORPE\n        programm_struct : COMMENT programm_body\n                        | programm_body\n    iot_device : IDENTiot_dev_control : IDENT\n        iot_command : TURN\n                    | SWITCH_STATE_TO\n                    | DIMMER\n    \n        toggle_cmd_args : CMDARG_ON\n                        | CMDARG_OFF\n    \n        iot_cmd_argument : toggle_cmd_args\n                         | NUMBER\n                         | RANGE DOT LSQB NUMBER COMMA NUMBER RSQB\n    \n        iot_object_expr : iot_device OCTOTHORPE iot_dev_control\n    \n        get_device_info : STATE\n    \n        iot_device_get_info : iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info\n                            | iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB\n    \n        assigment : iot_object_expr ASSIGN NUMBER\n                  | iot_object_expr ASSIGN toggle_cmd_args\n    \n        assigment_stmts : assigment_stmts assigment SEMICOLON\n                        | assigment SEMICOLON\n    \n        logical_comp : EGREATER\n                   | GREATER\n                   | ELESS\n                   | LESS\n                   | EQUAL\n                   | NOTEQUAL\n    \n        logical_operator : LOGIC_AND\n                         | LOGIC_OR\n    \n        logical_cond : logical_comp\n                     | logical_operator\n    \n        condition : LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN\n                  | LPAREN iot_device_get_info logical_comp NUMBER RPAREN\n                  | LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN\n    \n        condition_list : condition_list logical_operator condition\n                       | condition\n                       | LPAREN condition_list RPAREN\n    \n        if_stmt : IF LBRACE condition_list RBRACE THEN\n    \n        end_if : END\n    \n        condition_instr : if_stmt BEGIN assigment_stmts end_if SEMICOLON\n                        | if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON\n    \n        programm_body : programm_body condition_instr\n                      | condition_instr\n                      | programm_body assigment_stmts\n                      | assigment_stmts\n    '
     
-_lr_action_items = {'SWITCH_STATE_TO':([35,70,],[47,47,]),'GETSTATE':([70,],[79,]),'NUMBER':([22,55,56,57,58,59,60,61,68,87,91,94,97,],[34,66,-26,-25,-27,-23,-24,-22,74,89,93,96,98,]),'LOGIC_AND':([28,29,41,51,53,71,72,73,],[40,-36,40,-35,-37,-34,-33,-32,]),'STARTP':([0,],[2,]),'LPAREN':([21,30,37,39,40,],[30,30,50,-29,-28,]),'DOT':([4,11,24,25,42,44,45,46,47,64,77,80,90,],[14,-3,35,-4,54,62,-7,-5,-6,70,84,86,92,]),'RSQB':([31,32,74,75,76,93,95,98,99,],[-9,-8,-11,83,-10,95,-12,99,100,]),'COMMENT':([2,],[3,]),'$end':([1,18,23,],[0,-2,-1,]),'GREATER':([43,79,81,82,100,],[59,-14,-15,-16,-17,]),'CMDARG_ON':([22,55,56,57,58,59,60,61,68,],[32,32,-26,-25,-27,-23,-24,-22,32,]),'LOGIC_OR':([28,29,41,51,53,71,72,73,],[39,-36,39,-35,-37,-34,-33,-32,]),'FINISHP':([6,8,9,13,16,19,20,27,49,85,],[-42,-44,18,23,-21,-41,-43,-20,-39,-40,]),'SEMICOLON':([7,17,31,32,33,34,36,78,],[16,27,-9,-8,-19,-18,49,85,]),'BEGIN':([5,48,52,],[15,63,-38,]),'ELSE':([36,],[48,]),'ELESS':([43,79,81,82,100,],[60,-14,-15,-16,-17,]),'RBRACE':([28,29,51,53,71,72,73,],[38,-36,-35,-37,-34,-33,-32,]),'DIMMER':([35,70,],[45,45,]),'RPAREN':([29,31,32,41,51,53,65,66,67,71,72,73,79,81,82,100,],[-36,-9,-8,53,-35,-37,71,72,73,-34,-33,-32,-14,-15,-16,-17,]),'THEN':([38,],[52,]),'EGREATER':([43,79,81,82,100,],[61,-14,-15,-16,-17,]),'LESS':([43,79,81,82,100,],[57,-14,-15,-16,-17,]),'IF':([2,3,6,8,9,13,16,19,20,27,49,85,],[10,10,-42,-44,10,10,-21,-41,-43,-20,-39,-40,]),'IDENT':([2,3,6,8,9,13,14,15,16,19,20,26,27,30,49,50,54,55,56,57,58,59,60,61,63,69,85,],[11,11,-42,11,11,11,25,11,-21,-41,11,11,-20,11,-39,11,25,11,-26,-25,-27,-23,-24,-22,11,11,-40,]),'GETVALUE':([70,],[81,]),'LSQB':([62,84,86,92,],[68,87,88,94,]),'LBRACE':([10,],[21,]),'ASSIGN':([12,83,],[22,-13,]),'COMMA':([89,96,],[91,97,]),'NOTEQUAL':([43,79,81,82,100,],[58,-14,-15,-16,-17,]),'TURN':([35,70,],[46,46,]),'CMDARG_OFF':([22,55,56,57,58,59,60,61,68,],[31,31,-26,-25,-27,-23,-24,-22,31,]),'END':([16,26,27,69,],[-21,36,-20,78,]),'EQUAL':([43,79,81,82,100,],[56,-14,-15,-16,-17,]),'RANGE':([68,88,],[77,90,]),}
+_lr_action_items = {'LBRACE':([9,],[19,]),'RSQB':([83,84,],[84,85,]),'IDENT':([0,2,4,5,10,12,13,14,16,18,20,21,22,30,41,44,47,48,49,50,51,52,53,54,55,56,62,75,],[3,3,3,-42,3,3,3,-41,23,-20,3,3,-19,3,-39,3,3,-21,-22,-26,-23,-25,-24,23,23,3,3,-40,]),'NOTEQUAL':([39,69,70,85,],[50,-14,-15,-16,]),'$end':([2,4,5,11,13,14,18,20,22,41,75,],[-2,-44,-42,0,-43,-41,-20,-1,-19,-39,-40,]),'CMDARG_OFF':([17,47,48,49,50,51,52,53,],[27,27,-21,-22,-26,-23,-25,-24,]),'SEMICOLON':([8,15,25,26,27,28,32,33,68,],[18,22,-17,-18,-9,-8,41,-38,75,]),'RPAREN':([27,28,31,38,43,46,57,58,59,63,64,65,69,70,85,],[-9,-8,-35,46,-34,-36,63,64,65,-33,-32,-31,-14,-15,-16,]),'COMMENT':([0,],[10,]),'LPAREN':([19,30,34,35,36,],[30,30,-27,44,-28,]),'BEGIN':([1,42,45,],[12,56,-37,]),'LOGIC_AND':([29,31,38,43,46,63,64,65,],[34,-35,34,-34,-36,-33,-32,-31,]),'RBRACE':([29,31,43,46,63,64,65,],[37,-35,-34,-36,-33,-32,-31,]),'STATE':([66,],[69,]),'GREATER':([39,69,70,85,],[49,-14,-15,-16,]),'END':([18,21,22,62,],[-20,33,-19,33,]),'CMDARG_ON':([17,47,48,49,50,51,52,53,],[28,28,-21,-22,-26,-23,-25,-24,]),'DIMMER':([67,],[71,]),'SWITCH_STATE_TO':([67,],[72,]),'OCTOTHORPE':([3,6,23,40,60,],[-3,16,-4,54,66,]),'ASSIGN':([7,23,24,],[17,-4,-13,]),'EQUAL':([39,69,70,85,],[52,-14,-15,-16,]),'LSQB':([76,79,],[77,80,]),'DOT':([3,23,40,61,71,72,73,74,78,],[-3,-4,55,67,-7,-6,-5,76,79,]),'COMMA':([81,],[82,]),'TURN':([67,],[73,]),'THEN':([37,],[45,]),'NUMBER':([17,47,48,49,50,51,52,53,80,82,],[25,58,-21,-22,-26,-23,-25,-24,81,83,]),'RANGE':([77,],[78,]),'ELESS':([39,69,70,85,],[51,-14,-15,-16,]),'LOGIC_OR':([29,31,38,43,46,63,64,65,],[36,-35,36,-34,-36,-33,-32,-31,]),'ELSE':([32,33,],[42,-38,]),'IF':([0,2,4,5,10,13,14,18,20,22,41,75,],[9,9,-44,-42,9,-43,-41,-20,9,-19,-39,-40,]),'EGREATER':([39,69,70,85,],[48,-14,-15,-16,]),'LESS':([39,69,70,85,],[53,-14,-15,-16,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'logical_comp':([43,],[55,]),'assigment':([2,3,8,9,13,15,20,26,63,69,],[7,7,17,7,7,7,17,17,7,17,]),'iot_dev_control':([14,54,],[24,64,]),'condition_list':([21,30,],[28,41,]),'assigment_stmts':([2,3,9,13,15,63,],[8,8,20,20,26,69,]),'iot_cmd_argument':([68,],[75,]),'condition':([21,30,37,],[29,29,51,]),'iot_object_expr':([2,3,8,9,13,15,20,26,63,69,],[12,12,12,12,12,12,12,12,12,12,]),'get_device_info':([70,],[82,]),'logical_operator':([28,41,],[37,37,]),'iot_command':([35,70,],[44,80,]),'iot_device':([2,3,8,9,13,15,20,26,30,50,55,63,69,],[4,4,4,4,4,4,4,4,42,42,42,4,4,]),'iot_device_get_info':([30,50,55,],[43,43,67,]),'if_stmt':([2,3,9,13,],[5,5,5,5,]),'toggle_cmd_args':([22,55,68,],[33,65,76,]),'programm_body':([2,3,],[9,13,]),'programm_struct':([0,],[1,]),'condition_instr':([2,3,9,13,],[6,6,19,19,]),}
+_lr_goto_items = {'logical_comp':([39,],[47,]),'if_stmt':([0,2,10,20,],[1,1,1,1,]),'programm_body':([0,10,],[2,20,]),'end_if':([21,62,],[32,68,]),'condition':([19,30,35,],[31,31,43,]),'assigment':([0,2,4,10,12,13,20,21,56,62,],[8,8,15,8,8,15,8,15,8,15,]),'toggle_cmd_args':([17,47,],[26,57,]),'logical_operator':([29,38,],[35,35,]),'condition_list':([19,30,],[29,38,]),'get_device_info':([66,],[70,]),'iot_device_get_info':([30,44,47,],[39,39,59,]),'programm_struct':([0,],[11,]),'iot_command':([67,],[74,]),'iot_object_expr':([0,2,4,10,12,13,20,21,56,62,],[7,7,7,7,7,7,7,7,7,7,]),'assigment_stmts':([0,2,10,12,20,56,],[4,13,4,21,13,62,]),'condition_instr':([0,2,10,20,],[5,14,5,14,]),'iot_device':([0,2,4,10,12,13,20,21,30,44,47,56,62,],[6,6,6,6,6,6,6,6,40,40,40,6,6,]),'iot_dev_control':([16,54,55,],[24,60,61,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,48 +26,48 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> programm_struct","S'",1,None,None,None),
-  ('programm_struct -> STARTP COMMENT programm_body FINISHP','programm_struct',4,'p_programm_struct','flexAndBison.py',209),
-  ('programm_struct -> STARTP programm_body FINISHP','programm_struct',3,'p_programm_struct','flexAndBison.py',210),
-  ('iot_device -> IDENT','iot_device',1,'p_iot_device','flexAndBison.py',215),
-  ('iot_dev_control -> IDENT','iot_dev_control',1,'p_iot_dev_control','flexAndBison.py',220),
-  ('iot_command -> TURN','iot_command',1,'p_iot_command','flexAndBison.py',225),
-  ('iot_command -> SWITCH_STATE_TO','iot_command',1,'p_iot_command','flexAndBison.py',226),
-  ('iot_command -> DIMMER','iot_command',1,'p_iot_command','flexAndBison.py',227),
-  ('toggle_cmd_args -> CMDARG_ON','toggle_cmd_args',1,'p_toggle_cmd_args','flexAndBison.py',233),
-  ('toggle_cmd_args -> CMDARG_OFF','toggle_cmd_args',1,'p_toggle_cmd_args','flexAndBison.py',234),
-  ('iot_cmd_argument -> toggle_cmd_args','iot_cmd_argument',1,'p_iot_cmd_argument','flexAndBison.py',240),
-  ('iot_cmd_argument -> NUMBER','iot_cmd_argument',1,'p_iot_cmd_argument','flexAndBison.py',241),
-  ('iot_cmd_argument -> RANGE DOT LSQB NUMBER COMMA NUMBER RSQB','iot_cmd_argument',7,'p_iot_cmd_argument','flexAndBison.py',242),
-  ('iot_object_expr -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB','iot_object_expr',9,'p_iot_object_expr','flexAndBison.py',247),
-  ('get_device_info -> GETSTATE','get_device_info',1,'p_get_device_info','flexAndBison.py',252),
-  ('get_device_info -> GETVALUE','get_device_info',1,'p_get_device_info','flexAndBison.py',253),
-  ('iot_device_get_info -> iot_device DOT iot_dev_control DOT get_device_info','iot_device_get_info',5,'p_iot_device_get_info','flexAndBison.py',258),
-  ('iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB','iot_device_get_info',15,'p_iot_device_get_info','flexAndBison.py',259),
-  ('assigment -> iot_object_expr ASSIGN NUMBER','assigment',3,'p_assigment','flexAndBison.py',264),
-  ('assigment -> iot_object_expr ASSIGN toggle_cmd_args','assigment',3,'p_assigment','flexAndBison.py',265),
-  ('assigment_stmts -> assigment_stmts assigment SEMICOLON','assigment_stmts',3,'p_assigment_stmts','flexAndBison.py',270),
-  ('assigment_stmts -> assigment SEMICOLON','assigment_stmts',2,'p_assigment_stmts','flexAndBison.py',271),
-  ('logical_comp -> EGREATER','logical_comp',1,'p_logical_comp','flexAndBison.py',276),
-  ('logical_comp -> GREATER','logical_comp',1,'p_logical_comp','flexAndBison.py',277),
-  ('logical_comp -> ELESS','logical_comp',1,'p_logical_comp','flexAndBison.py',278),
-  ('logical_comp -> LESS','logical_comp',1,'p_logical_comp','flexAndBison.py',279),
-  ('logical_comp -> EQUAL','logical_comp',1,'p_logical_comp','flexAndBison.py',280),
-  ('logical_comp -> NOTEQUAL','logical_comp',1,'p_logical_comp','flexAndBison.py',281),
-  ('logical_operator -> LOGIC_AND','logical_operator',1,'p_logical_operator','flexAndBison.py',286),
-  ('logical_operator -> LOGIC_OR','logical_operator',1,'p_logical_operator','flexAndBison.py',287),
-  ('logical_cond -> logical_comp','logical_cond',1,'p_logical_cond','flexAndBison.py',292),
-  ('logical_cond -> logical_operator','logical_cond',1,'p_logical_cond','flexAndBison.py',293),
-  ('condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN','condition',5,'p_condition','flexAndBison.py',298),
-  ('condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN','condition',5,'p_condition','flexAndBison.py',299),
-  ('condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN','condition',5,'p_condition','flexAndBison.py',300),
-  ('condition_list -> condition_list logical_operator condition','condition_list',3,'p_condition_list','flexAndBison.py',305),
-  ('condition_list -> condition','condition_list',1,'p_condition_list','flexAndBison.py',306),
-  ('condition_list -> LPAREN condition_list RPAREN','condition_list',3,'p_condition_list','flexAndBison.py',307),
-  ('if_stmt -> IF LBRACE condition_list RBRACE THEN','if_stmt',5,'p_if_stmt','flexAndBison.py',312),
-  ('condition_instr -> if_stmt BEGIN assigment_stmts END SEMICOLON','condition_instr',5,'p_condition_instr','flexAndBison.py',317),
-  ('condition_instr -> if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON','condition_instr',9,'p_condition_instr','flexAndBison.py',318),
-  ('programm_body -> programm_body condition_instr','programm_body',2,'p_programm_body','flexAndBison.py',324),
-  ('programm_body -> condition_instr','programm_body',1,'p_programm_body','flexAndBison.py',325),
-  ('programm_body -> programm_body assigment_stmts','programm_body',2,'p_programm_body','flexAndBison.py',326),
-  ('programm_body -> assigment_stmts','programm_body',1,'p_programm_body','flexAndBison.py',327),
+  ('programm_struct -> COMMENT programm_body','programm_struct',2,'p_programm_struct','flexAndBison.py',238),
+  ('programm_struct -> programm_body','programm_struct',1,'p_programm_struct','flexAndBison.py',239),
+  ('iot_device -> IDENT','iot_device',1,'p_iot_device','flexAndBison.py',243),
+  ('iot_dev_control -> IDENT','iot_dev_control',1,'p_iot_dev_control','flexAndBison.py',248),
+  ('iot_command -> TURN','iot_command',1,'p_iot_command','flexAndBison.py',254),
+  ('iot_command -> SWITCH_STATE_TO','iot_command',1,'p_iot_command','flexAndBison.py',255),
+  ('iot_command -> DIMMER','iot_command',1,'p_iot_command','flexAndBison.py',256),
+  ('toggle_cmd_args -> CMDARG_ON','toggle_cmd_args',1,'p_toggle_cmd_args','flexAndBison.py',263),
+  ('toggle_cmd_args -> CMDARG_OFF','toggle_cmd_args',1,'p_toggle_cmd_args','flexAndBison.py',264),
+  ('iot_cmd_argument -> toggle_cmd_args','iot_cmd_argument',1,'p_iot_cmd_argument','flexAndBison.py',271),
+  ('iot_cmd_argument -> NUMBER','iot_cmd_argument',1,'p_iot_cmd_argument','flexAndBison.py',272),
+  ('iot_cmd_argument -> RANGE DOT LSQB NUMBER COMMA NUMBER RSQB','iot_cmd_argument',7,'p_iot_cmd_argument','flexAndBison.py',273),
+  ('iot_object_expr -> iot_device OCTOTHORPE iot_dev_control','iot_object_expr',3,'p_iot_object_expr','flexAndBison.py',279),
+  ('get_device_info -> STATE','get_device_info',1,'p_get_device_info','flexAndBison.py',286),
+  ('iot_device_get_info -> iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info','iot_device_get_info',5,'p_iot_device_get_info','flexAndBison.py',291),
+  ('iot_device_get_info -> iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB','iot_device_get_info',15,'p_iot_device_get_info','flexAndBison.py',292),
+  ('assigment -> iot_object_expr ASSIGN NUMBER','assigment',3,'p_assigment','flexAndBison.py',299),
+  ('assigment -> iot_object_expr ASSIGN toggle_cmd_args','assigment',3,'p_assigment','flexAndBison.py',300),
+  ('assigment_stmts -> assigment_stmts assigment SEMICOLON','assigment_stmts',3,'p_assigment_stmts','flexAndBison.py',306),
+  ('assigment_stmts -> assigment SEMICOLON','assigment_stmts',2,'p_assigment_stmts','flexAndBison.py',307),
+  ('logical_comp -> EGREATER','logical_comp',1,'p_logical_comp','flexAndBison.py',312),
+  ('logical_comp -> GREATER','logical_comp',1,'p_logical_comp','flexAndBison.py',313),
+  ('logical_comp -> ELESS','logical_comp',1,'p_logical_comp','flexAndBison.py',314),
+  ('logical_comp -> LESS','logical_comp',1,'p_logical_comp','flexAndBison.py',315),
+  ('logical_comp -> EQUAL','logical_comp',1,'p_logical_comp','flexAndBison.py',316),
+  ('logical_comp -> NOTEQUAL','logical_comp',1,'p_logical_comp','flexAndBison.py',317),
+  ('logical_operator -> LOGIC_AND','logical_operator',1,'p_logical_operator','flexAndBison.py',322),
+  ('logical_operator -> LOGIC_OR','logical_operator',1,'p_logical_operator','flexAndBison.py',323),
+  ('logical_cond -> logical_comp','logical_cond',1,'p_logical_cond','flexAndBison.py',328),
+  ('logical_cond -> logical_operator','logical_cond',1,'p_logical_cond','flexAndBison.py',329),
+  ('condition -> LPAREN iot_device_get_info logical_comp iot_device_get_info RPAREN','condition',5,'p_condition','flexAndBison.py',334),
+  ('condition -> LPAREN iot_device_get_info logical_comp NUMBER RPAREN','condition',5,'p_condition','flexAndBison.py',335),
+  ('condition -> LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN','condition',5,'p_condition','flexAndBison.py',336),
+  ('condition_list -> condition_list logical_operator condition','condition_list',3,'p_condition_list','flexAndBison.py',343),
+  ('condition_list -> condition','condition_list',1,'p_condition_list','flexAndBison.py',344),
+  ('condition_list -> LPAREN condition_list RPAREN','condition_list',3,'p_condition_list','flexAndBison.py',345),
+  ('if_stmt -> IF LBRACE condition_list RBRACE THEN','if_stmt',5,'p_if_stmt','flexAndBison.py',350),
+  ('end_if -> END','end_if',1,'p_end_if','flexAndBison.py',355),
+  ('condition_instr -> if_stmt BEGIN assigment_stmts end_if SEMICOLON','condition_instr',5,'p_condition_instr','flexAndBison.py',369),
+  ('condition_instr -> if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON','condition_instr',9,'p_condition_instr','flexAndBison.py',370),
+  ('programm_body -> programm_body condition_instr','programm_body',2,'p_programm_body','flexAndBison.py',375),
+  ('programm_body -> condition_instr','programm_body',1,'p_programm_body','flexAndBison.py',376),
+  ('programm_body -> programm_body assigment_stmts','programm_body',2,'p_programm_body','flexAndBison.py',377),
+  ('programm_body -> assigment_stmts','programm_body',1,'p_programm_body','flexAndBison.py',378),
 ]

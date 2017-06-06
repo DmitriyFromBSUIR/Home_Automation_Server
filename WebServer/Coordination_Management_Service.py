@@ -219,6 +219,11 @@ class Transceiver:
     def run(self):
         self.transmit(False)
 
+'''
+def data_pack_generate():
+    return JSON_Gen.JSON_Packets_Gen.dataPacketSectionGenerate(dict(), JSON_Gen.DATA_PACK_TYPE_DIR)
+'''
+
 def packetsGeneration(packets_max_count=20, isLogging=False):
     # generate 1000 pseudorandom packets
     dirsToGenPackets = JSON_Gen.start_test(packets_max_count)

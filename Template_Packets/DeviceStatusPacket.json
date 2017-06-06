@@ -1,5 +1,5 @@
 {
-	"type": "status",
+	"type": "dev_status",
   "dev_id": "Unique_str",
 	"status": ["on", "off", "unknown"]
 }

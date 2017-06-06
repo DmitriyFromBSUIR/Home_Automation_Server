@@ -1,26 +1,51 @@
 {
     "type":"dev_hello",
   	"dev_id": "Unique_str",
-  	"dev_type": ["lamp", "smart_power_jack", "temperature_sensor", "light_sensor",      "electric_driver", "smoke_detector", "water_leakage_sensor", "gas_sensor", "motion_or_sound_sensor", "door_sensor", "unknown_device", "unknown_controller"],
-  	"actions": [
-   	 {
+  	"label": ["lamp", "smart_power_jack", "temperature_sensor", "light_sensor", "electric_driver", "smoke_detector", "water_leakage_sensor", "gas_sensor", "motion_or_sound_sensor", "door_sensor", "unknown_device", "unknown_controller"],
+  	"controls": [
+   	    {
       		"name": "Unique_Str",
-          "id": ["0", "1024"],
-      		"type": "toggle",
-          "state": ["on", "off"]
+            "ctrl_id": ["0", "1024"],
+      		"type": "toggle"
     	},
-      {
+        {
       		"name": "Unique_Str",
-          "id": ["0", "1024"],
-      		"type": "switch_state",
-      		"state": ["0", "1024"]
+            "ctrl_id": ["0", "1024"],
+      		"type": "switch_state"
     	},
     	{
       		"name": "Unique_Str",
-          "id": ["0", "1024"],
-          "type": "dimmer",
-      		"state": ["0", "100"]
+            "ctrl_id": ["0", "1024"],
+            "type": "dimmer"
+    	},
+        {
+      		"name": "Unique_Str",
+            "ctrl_id": ["0", "1024"],
+      		"type": "num_value"
     	}
     ],
+    "changes_packet": {
+      "type": "dev_changes",
+      "dev_id": "Unique_str",
+      "controls": [
+      {
+          "ctrl_id": "Unique_Str",
+          "state": ["on", "off"]
+      },
+      {
+          "ctrl_id": "Unique_Str",
+          "state": ["0", "1024"]
+      },
+      {
+          "ctrl_id": "Unique_Str",
+          "state": ["0", "100"]
+      },
+      {
+          "ctrl_id": "Unique_Str",
+          "state": ["0", "4096"]
+      }
+      ],
+      "time_stamp": "01/01/1970"
+      },
   	"time_stamp": "01.01.1970"
 }

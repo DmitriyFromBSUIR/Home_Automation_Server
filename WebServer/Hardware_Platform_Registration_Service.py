@@ -1,16 +1,13 @@
-
-import os
+import datetime as dt
 import sys
 import ujson
+
 import urllib3
-import random as rnd
-import time
-import json
-import datetime as dt
 
-import LAN_Tunnel as tunneling
+from Registration import LAN_Tunnel as tunneling
 
-HTTP_URI = "http://c586d48b.ngrok.io/automation_server"
+HTTP_URI = "http://51b8e1df.ngrok.io/automation_server"
+#HTTP_URI = "http://iot-tumbler.herokuapp.com/automation_server"
 #HTTP_URI = "http://f6f7086b.ngrok.io:80/PacketsHandler"
 
 GEOLOC_SERVICE_URL = "http://ip-api.com/json"

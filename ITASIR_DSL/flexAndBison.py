@@ -47,10 +47,12 @@ tokens = (
     'DIMMER',
     'IDENT',
     'NUMBER',
-    'GETSTATE',
-    'GETVALUE',
+    #'GETSTATE',
+    #'GETVALUE',
+    'STATE',
     'LBRACE',
     'RBRACE',
+    'OCTOTHORPE',
 )
 
 # Regular expression rules for simple tokens
@@ -76,6 +78,7 @@ t_EQUAL = r'='
 t_NOTEQUAL = r'!='
 t_DOT = r'\.'
 t_COMMA = r'\,'
+t_OCTOTHORPE = r'#'
 '''
 t_PSTART   = r'PSTART'
 t_PFINISH  = r'PFINISH'
@@ -121,17 +124,17 @@ reserved = {
     'off' : 'CMDARG_OFF',
     'switch_state_to' : 'SWITCH_STATE_TO',
     'dimmer': 'DIMMER',
-    'getState': 'GETSTATE',
-    'getValue': 'GETVALUE',
+    'state': 'STATE',
+    #'getState': 'GETSTATE',
+    #'getValue': 'GETVALUE',
 }
 
 #literals = ['=', '+', '-', '*', '/', '(', ')', '[', ']', '{', '}', '.', ';']
 
 def t_IDENT(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    r'[a-zA-Z_0-9\:\.][a-zA-Z_0-9\:\.]*'
     t.type = reserved.get(t.value,'IDENT')    # Check for reserved words
     return t
-
 
 # игнорируем комментарии
 def t_comment(t):
@@ -172,6 +175,7 @@ import ujson
 #from Intermediate_Representation_DSL_Translator.Lexer  import tokens
 
 import Intermediate_Representation_DSL_Translator.ParserLogger as pLogger
+import Intermediate_Representation_DSL_Translator.Publisher_Subscriber_Pattern as psp
 
 # controls of iot-devices that are tracked by the UAS Launcher (complex key: (iotDeviceID, controlID), value: state or value of cntrl)
 __tracking_iot_device_controls = dict()
@@ -183,8 +187,43 @@ __active_operating_iot_device_controls = dict()
 _activeOperatingCompositeKey = list()
 _activeOperatingValues = list()
 
+# if_stmt in Translated View
+__if_stmts_list = list()
+
 # user automation scripts (key: script name, value: tracking and operating controls)
 #__uas_names = dict()
+
+# funcs for create the Interpreter's Intermediate Code Representation Tables (Interpreter_ICRT)
+def user_automation_scripts_interpreting(id_delim="_"):
+    # controls in the tracking iot-devices
+    for trackingCompositeKey, trackingValue in zip(_trackingCompositeKey, _trackingValues):
+        __tracking_iot_device_controls.update({trackingCompositeKey: trackingValue})
+    # controls in the operating iot-devices
+    for operatingCompositeKey, operatingValue in zip(_activeOperatingCompositeKey, _activeOperatingValues):
+        subscriberName = str(operatingCompositeKey[0]) + id_delim + str(operatingCompositeKey[1])
+        # msg_center will be set in the future by the Interpreter or UAS_Launcher
+        msg_center = None
+        subscriber = psp.Subscriber(subscriberName, msg_center)
+        __active_operating_iot_device_controls.update({operatingCompositeKey: [subscriber, operatingValue]})
+    translated_if_stmt = (dict(__tracking_iot_device_controls), dict(__active_operating_iot_device_controls))
+    __if_stmts_list.append(translated_if_stmt)
+    return translated_if_stmt
+
+# clear structures for new "if statement"
+def reallocGlobalStructuresMem():
+    _trackingCompositeKey = list()
+    _trackingValues = list()
+    _activeOperatingCompositeKey = list()
+    _activeOperatingValues = list()
+
+# clear structures for new "if statement"
+def clearGlobalStructures():
+    _trackingCompositeKey.clear()
+    _trackingValues.clear()
+    _activeOperatingCompositeKey.clear()
+    _activeOperatingValues.clear()
+    __tracking_iot_device_controls.clear()
+    __active_operating_iot_device_controls.clear()
 
 # Parsing rules
 '''
@@ -195,8 +234,8 @@ def p_statement_expr(t):
 
 def p_programm_struct(t):
     '''
-        programm_struct : STARTP COMMENT programm_body FINISHP
-                        | STARTP programm_body FINISHP
+        programm_struct : COMMENT programm_body
+                        | programm_body
     '''
 
 def p_iot_device(t):
@@ -236,20 +275,19 @@ def p_iot_cmd_argument(t):
 
 def p_iot_object_expr(t):
     '''
-        iot_object_expr : iot_device DOT iot_dev_control DOT iot_command DOT LSQB iot_cmd_argument RSQB
+        iot_object_expr : iot_device OCTOTHORPE iot_dev_control
     '''
     _activeOperatingCompositeKey.append((t[1], t[3]))
     t[0] = _activeOperatingCompositeKey
 
 def p_get_device_info(t):
     '''
-        get_device_info : GETSTATE
-                        | GETVALUE
+        get_device_info : STATE
     '''
 
 def p_iot_device_get_info(t):
     '''
-        iot_device_get_info : iot_device DOT iot_dev_control DOT get_device_info
+        iot_device_get_info : iot_device OCTOTHORPE iot_dev_control OCTOTHORPE get_device_info
                             | iot_device DOT iot_dev_control DOT iot_command DOT LSQB RANGE DOT LSQB NUMBER COMMA NUMBER RSQB RSQB
     '''
     _trackingCompositeKey.append( (t[1], t[3]) )
@@ -296,8 +334,8 @@ def p_condition(t):
                   | LPAREN iot_device_get_info logical_comp NUMBER RPAREN
                   | LPAREN iot_device_get_info logical_comp toggle_cmd_args RPAREN
     '''
-    #__tracking_iot_device_controls.update({_trackingCompositeKey})
-    _trackingValues.append(t[4])
+
+    #_trackingValues.append(t[4])
 
 def p_condition_list(t):
     '''
@@ -310,14 +348,26 @@ def p_if_stmt(t):
     '''
         if_stmt : IF LBRACE condition_list RBRACE THEN
     '''
-    isGetDataStmt = False
+
+def p_end_if(t):
+    '''
+        end_if : END
+    '''
+    user_automation_scripts_interpreting()
+    #reallocGlobalStructuresMem()
+    clearGlobalStructures()
+    '''
+    print("if_stmt list:")
+    print(__if_stmts_list)
+    for if_stmt in __if_stmts_list:
+        print(if_stmt)
+    '''
 
 def p_condition_instr(t):
     '''
-        condition_instr : if_stmt BEGIN assigment_stmts END SEMICOLON
-                        | if_stmt BEGIN assigment_stmts END ELSE BEGIN assigment_stmts END SEMICOLON
+        condition_instr : if_stmt BEGIN assigment_stmts end_if SEMICOLON
+                        | if_stmt BEGIN assigment_stmts end_if ELSE BEGIN assigment_stmts end_if SEMICOLON
     '''
-    #print(t[0])
 
 def p_programm_body(p):
     '''
@@ -326,7 +376,6 @@ def p_programm_body(p):
                       | programm_body assigment_stmts
                       | assigment_stmts
     '''
-    #print(p[0])
 
 def p_error(t):
     #print("Syntax error at '%s'" % t.value)
@@ -363,7 +412,6 @@ log = pLogger.run(lexer_log_filename="fab_lexerlog.txt", parser_log_filename="fa
 Parser = yacc.yacc(debug=True, debuglog=log, errorlog=yacc.NullLogger())
 
 
-
 # Test it out
 data = '''
     STARTP
@@ -378,34 +426,52 @@ data = '''
         dimmer1.d1c.dimmer.[25] := 50;
     end;
 
+    if { ((lamp11.lamp11contr.getState = on) and (tempSensor11.tempSensor11contr.getValue = 0) ) or (lamp22.lamp22contr.getState = off) } then
+    begin
+        tempSensor22.ts22c.turn.[off] := on;
+        lamp33.l33c.turn.[off] := on;
+        selector11.s11c.switch_state_to.[3] := 5;
+        dimmer11.d11c.dimmer.[25] := 50;
+    end;
+
     FINISHP
     '''
 
-log = pLogger.run()
-'''
+parser_runtime_log = pLogger.run(parser_log_filename="parser_logfle.txt")
+
 while True:
     try:
         s = input('> ')
+        Parser.parse("if { (192.168.2.76#1198#state = on) and (A4:7D:7B:97:0C:9F#557#state = on) } then begin A3:7D:7B:97:0C:9F#43 := on; end; ")
 #        file = open('cond.dal', 'r')
 #        s = file.readlines()
 #        print(s)
     except EOFError:
         break
-'''
+
 
 import Intermediate_Representation_DSL_Translator.Publisher_Subscriber_Pattern as psp
 
 class Interpreter:
 
-    def __init__(self, tracking_iot_device_controls, active_operating_iot_device_controls, msg_center, id_delim="_"):
-        self._tracking_iot_device_controls = tracking_iot_device_controls
-        self._active_operating_iot_device_controls = active_operating_iot_device_controls
+    #def __init__(self, tracking_iot_device_controls, active_operating_iot_device_controls, interpreter_icrt, msg_center, id_delim="_"):
+    def __init__(self, interpreter_icrt, msg_center, id_delim="_"):
+        #self._tracking_iot_device_controls = tracking_iot_device_controls
+        #self._active_operating_iot_device_controls = active_operating_iot_device_controls
         self._msg_center = msg_center
         self._id_delim = id_delim
+        # Interpreter's Intermediate Code Representation Tables (Interpreter_ICRT)
+        self._interpreter_icrt = interpreter_icrt
 
+    def getInterpreterICRTables(self):
+        return self._interpreter_icrt
+
+    '''
     def getInterpreterTables(self):
         return (self._tracking_iot_device_controls, self._active_operating_iot_device_controls)
+    '''
 
+    '''
     def user_automation_scripts_interpreting(self):
         # controls in the tracking iot-devices
         for trackingCompositeKey, trackingValue in zip(_trackingCompositeKey, _trackingValues):
@@ -415,20 +481,30 @@ class Interpreter:
             subscriberName = str(operatingCompositeKey[0]) + self._id_delim + str(operatingCompositeKey[1])
             subscriber = psp.Subscriber(subscriberName, self._msg_center)
             self._active_operating_iot_device_controls.update({operatingCompositeKey: [subscriber, operatingValue]})
+    '''
 
-    def codeTranslation(self, inputCode = data):
+    def codeTranslation(self, inputCode = data, log = parser_runtime_log, isDebuggingPrint=False):
         #yacc.parse(s, debug=log, tracking=True)
         Parser.parse(inputCode, debug=log, tracking=True)
         # create interpreting tables
-        self.user_automation_scripts_interpreting()
+        #self.user_automation_scripts_interpreting()
+        #print("if_stmt list:")
+        #print(self._interpreter_icrt)
+        if isDebuggingPrint:
+            print("if_stmt list:")
+            for if_stmt in self._interpreter_icrt:
+                print(if_stmt)
+        '''
         print("tracking iot-dev controls (ComKeys): ", _trackingCompositeKey)
         print("operating iot-dev controls (ComKeys): ", _activeOperatingCompositeKey)
         print("tracking Values/States: ", _trackingValues)
         print("operating Values/States: ", _activeOperatingValues)
         print(self._tracking_iot_device_controls)
         print(self._active_operating_iot_device_controls)
+        '''
 
 # center for messages exchanging
 msgCenter = psp.Provider()
 # create Interpreter for user automation scripts translating
-uasInterpreter = Interpreter(__tracking_iot_device_controls, __active_operating_iot_device_controls, msgCenter)
+#uasInterpreter = Interpreter(__tracking_iot_device_controls, __active_operating_iot_device_controls, __if_stmts_list, msgCenter)
+uasInterpreter = Interpreter(__if_stmts_list, msgCenter)

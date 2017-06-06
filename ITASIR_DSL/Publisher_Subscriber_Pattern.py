@@ -37,6 +37,9 @@ class Subscriber:
         self.name = name
         self.provider = msg_center
 
+    def setMsgProvider(self, msg_center):
+        self.provider = msg_center
+
     def subscribe(self, msg):
         self.provider.subscribe(msg, self)
 
@@ -74,6 +77,34 @@ def test():
 
     message_center.update()
 
+def mytest2():
+    # create environment for messaging
+    message_center = Provider()
+    # create object for event publications
+    pub_events_emitter_center = Publisher(message_center)
+
+    # create subscriber with name "Lamp"
+    lamp = Subscriber("Lamp", message_center)
+    # subscribe Lamp on event "on"
+    lamp.subscribe("on")
+    # create subscriber with name "Dimmer"
+    dimmer = Subscriber("Dimmer", message_center)
+    # subscribe Dimmer on event "off"
+    dimmer.subscribe("off")
+    # create subscriber with name "Selector"
+    selector = Subscriber("Selector", message_center)
+    # subscribe Selector on event "num_value = 5"
+    selector.subscribe("num_value = 5")
+    selector.subscribe("num_value = 20")
+    selector.unsubscribe("num_value = 20")
+    selector.subscribe("lamp = on")
+
+    pub_events_emitter_center.publish("on")
+    pub_events_emitter_center.publish("off")
+    pub_events_emitter_center.publish("num_value = 5")
+    pub_events_emitter_center.publish("lamp = on")
+
+    message_center.update()
 
 if __name__ == "__main__":
-    test()
+    mytest2()
